@@ -19,11 +19,12 @@ body {
   padding: 40px 20px;
 }
 
+/* LEFT ALIGNED LAYOUT */
 .container {
   max-width: 1100px;
   margin: 0;
   padding-top: 60px;
-  padding-left: 40px; 
+  padding-left: 40px;
 }
 
 .grid {
@@ -45,6 +46,12 @@ h2 {
   margin-top: 30px;
 }
 
+.small {
+  font-size: 15px;
+  opacity: 0.95;
+}
+
+/* LISTS */
 .list {
   list-style: none;
   padding: 0;
@@ -54,7 +61,8 @@ h2 {
 .list li {
   margin-bottom: 10px;
 }
-  
+
+/* LINKS */
 .link {
   text-decoration: none;
   color: #219ebc;
@@ -78,11 +86,34 @@ h2 {
   transform: scaleX(1);
 }
 
-.small {
-  font-size: 15px;
-  opacity: 0.95;
+/* FORM */
+input, textarea {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 8px;
+  font-family: inherit;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  outline: none;
+  background: transparent;
 }
 
+button {
+  background: #0077b6;
+  color: white;
+  border: none;
+  padding: 10px;
+  font-family: inherit;
+  cursor: pointer;
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+button:hover {
+  background: #005f8d;
+}
+
+/* FOOTER */
 footer {
   margin-top: 60px;
   font-size: 13px;
@@ -95,7 +126,7 @@ footer {
   }
 
   .container {
-    padding-left: 20px; 
+    padding-left: 20px;
   }
 }
 
@@ -117,8 +148,7 @@ footer {
       <div class="small">
         Yuliia Leites is a psychoanalytic psychotherapist from Kyiv, Ukraine, and a candidate of the International Psychoanalytical Association (IPA).<br><br>
         Her practice sits at the fracture points of war and social upheaval — with civilians, soldiers and queer people.<br><br>
-        As a member of the Ukrainian Psychedelic Research Association (UPRA), she brings psychoanalytic thinking into psychedelic-assisted therapy — a radical method for a radical age.<br><br>
-        Russian/English
+        As a member of the Ukrainian Psychedelic Research Association (UPRA), she brings psychoanalytic thinking into psychedelic-assisted therapy — a radical method for a radical age.
       </div>
     </div>
 
@@ -159,10 +189,25 @@ footer {
 
     <!-- RIGHT -->
     <div>
+
       <h2>CONTACT</h2>
-      <ul class="list small">
-        <li>yuliia@email.com</li>
-      </ul>
+
+      <div class="small" style="margin-bottom:10px;">
+        Clinical inquiries / possible therapeutic work
+      </div>
+
+      <input type="text" id="name" placeholder="Your name">
+
+      <textarea id="message" rows="6" placeholder="What would you like to work on / speak about?"></textarea>
+
+      <button onclick="sendEmail()">Send Inquiry</button>
+
+      <div class="small" style="margin-bottom:15px;">
+        Direct email: <br>
+        <a class="link" href="mailto:yuliialeites@gmail.com">
+          yuliialeites@gmail.com
+        </a>
+      </div>
 
       <h2>LINKS</h2>
       <ul class="list">
@@ -172,6 +217,7 @@ footer {
           </a>
         </li>
       </ul>
+
     </div>
 
   </div>
@@ -181,6 +227,22 @@ footer {
   </footer>
 
 </div>
+
+<script>
+function sendEmail() {
+  const name = document.getElementById("name").value;
+  const message = document.getElementById("message").value;
+
+  const subject = encodeURIComponent("Clinical Inquiry from " + name);
+  const body = encodeURIComponent(
+    "Name: " + name + "\n\n" +
+    "Inquiry:\n" + message
+  );
+
+  window.location.href =
+    "mailto:yuliialeites@gmail.com?subject=" + subject + "&body=" + body;
+}
+</script>
 
 </body>
 </html>
