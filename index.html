@@ -19,15 +19,6 @@ body {
   padding: 40px 20px;
 }
 
-/* CANVAS */
-#cursorCanvas {
-  position: fixed;
-  top: 0;
-  left: 0;
-  pointer-events: none;
-  z-index: 9999;
-}
-
 .container {
   max-width: 1100px;
   margin: 0;
@@ -43,12 +34,16 @@ body {
 
 h1 {
   font-size: 26px;
+  color: #000814;
+  margin-bottom: 12px;
   font-weight: 400;
 }
 
 h2 {
   font-size: 15px;
   letter-spacing: 1px;
+  color: #000814;
+  margin-top: 30px;
   font-weight: 400;
 }
 
@@ -60,6 +55,7 @@ h2 {
 .list {
   list-style: none;
   padding: 0;
+  margin-top: 10px;
 }
 
 .list li {
@@ -100,6 +96,7 @@ input, textarea {
   outline: none;
 }
 
+/* ✅ FIX: prevent checkbox from inheriting full width */
 input[type="checkbox"] {
   width: auto;
 }
@@ -121,22 +118,19 @@ button:hover {
   color: #000814;
 }
 
-.consent {
-  display: flex;
-  gap: 8px;
-  align-items: flex-start;
+footer {
+  margin-top: 60px;
   font-size: 13px;
-  margin-bottom: 15px;
-  width: 100%;
-}
-
-.consent span {
-  flex: 1;
+  color: #000814;
 }
 
 @media (max-width: 900px) {
   .grid {
     grid-template-columns: 1fr;
+  }
+
+  .container {
+    padding-left: 20px;
   }
 }
 
@@ -145,9 +139,6 @@ button:hover {
 
 <body>
 
-<!-- INK CURSOR -->
-<canvas id="cursorCanvas"></canvas>
-
 <div class="container">
 
   <h1>Yuliia Leites</h1>
@@ -155,7 +146,7 @@ button:hover {
 
   <div class="grid">
 
-    <!-- ABOUT -->
+    <!-- LEFT -->
     <div>
       <h2>ABOUT</h2>
       <div class="small">
@@ -165,7 +156,7 @@ button:hover {
       </div>
     </div>
 
-    <!-- PUBLICATIONS -->
+    <!-- MIDDLE -->
     <div>
 
       <h2>PUBLICATIONS</h2>
@@ -199,7 +190,7 @@ button:hover {
 
     </div>
 
-    <!-- CONTACT -->
+    <!-- RIGHT -->
     <div>
 
       <h2>CONTACT</h2>
@@ -212,9 +203,10 @@ button:hover {
 
       <textarea id="message" rows="6" placeholder="What would you like to work on / speak about?"></textarea>
 
-      <label class="consent">
-        <input type="checkbox" id="consent">
-        <span>
+      <!-- CHECKBOX (FIXED + SAFE) -->
+      <label style="display:flex; align-items:flex-start; gap:8px; font-size:13px; margin-bottom:15px; width:100%;">
+        <input type="checkbox" id="consent" style="margin-top:3px; width:auto;">
+        <span style="flex:1;">
           I consent to my information being used to respond to my inquiry and understand it will be kept confidential
         </span>
       </label>
@@ -228,9 +220,22 @@ button:hover {
         </a>
       </div>
 
+      <h2>LINKS</h2>
+      <ul class="list">
+        <li>
+          <a class="link" href="https://www.instagram.com/sugar_prawn/" target="_blank">
+            Instagram
+          </a>
+        </li>
+      </ul>
+
     </div>
 
   </div>
+
+  <footer>
+    © 2026 · Yuliia Leites
+  </footer>
 
 </div>
 
@@ -241,75 +246,19 @@ function sendEmail() {
   const consent = document.getElementById("consent").checked;
 
   if (!consent) {
-    alert("Please confirm consent.");
+    alert("Please confirm consent before sending your inquiry.");
     return;
   }
 
-  const subject = encodeURIComponent("Inquiry from " + name);
-  const body = encodeURIComponent(message);
+  const subject = encodeURIComponent("Clinical Inquiry from " + name);
+  const body = encodeURIComponent(
+    "Name: " + name + "\n\n" +
+    "Inquiry:\n" + message
+  );
 
   window.location.href =
     "mailto:yuliialeites@gmail.com?subject=" + subject + "&body=" + body;
 }
-</script>
-
-<!-- ========================= -->
-<!-- FADE MEMORY INK CURSOR -->
-<!-- ========================= -->
-
-<script>
-const canvas = document.getElementById("cursorCanvas");
-const ctx = canvas.getContext("2d");
-
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-let points = [];
-
-window.addEventListener("resize", () => {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-});
-
-window.addEventListener("mousemove", (e) => {
-  points.push({
-    x: e.clientX,
-    y: e.clientY,
-    alpha: 1
-  });
-
-  if (points.length > 120) {
-    points.shift();
-  }
-});
-
-function draw() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  ctx.lineCap = "round";
-  ctx.lineJoin = "round";
-
-  for (let i = 1; i < points.length; i++) {
-    const p1 = points[i - 1];
-    const p2 = points[i];
-
-    // fade older points slowly (memory effect)
-    p2.alpha *= 0.96;
-
-    ctx.beginPath();
-    ctx.moveTo(p1.x, p1.y);
-    ctx.lineTo(p2.x, p2.y);
-
-    ctx.strokeStyle = `rgba(0, 119, 182, ${p2.alpha * 0.5})`;
-    ctx.lineWidth = 2;
-
-    ctx.stroke();
-  }
-
-  requestAnimationFrame(draw);
-}
-
-draw();
 </script>
 
 </body>
