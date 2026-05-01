@@ -19,7 +19,7 @@ body {
   padding: 40px 20px;
 }
 
-/* INK CANVAS */
+/* INK CURSOR CANVAS */
 #cursorCanvas {
   position: fixed;
   top: 0;
@@ -28,7 +28,6 @@ body {
   z-index: 9999;
 }
 
-/* PAGE LAYOUT */
 .container {
   max-width: 1100px;
   margin: 0;
@@ -146,7 +145,7 @@ button:hover {
 
 <body>
 
-<!-- INK CURSOR CANVAS -->
+<!-- INK CURSOR -->
 <canvas id="cursorCanvas"></canvas>
 
 <div class="container">
@@ -166,7 +165,7 @@ button:hover {
     <div>
       <h2>PUBLICATIONS</h2>
       <ul class="list">
-        <li><a class="link" href="#">Example Link</a></li>
+        <li><a class="link" href="#">Example</a></li>
       </ul>
     </div>
 
@@ -209,10 +208,7 @@ function sendEmail() {
 }
 </script>
 
-<!-- ========================= -->
-<!-- LIQUID INK CURSOR SCRIPT -->
-<!-- ========================= -->
-
+<!-- INK CURSOR SCRIPT (FIXED + SIMPLE LINE) -->
 <script>
 const canvas = document.getElementById("cursorCanvas");
 const ctx = canvas.getContext("2d");
@@ -222,39 +218,21 @@ canvas.height = window.innerHeight;
 
 let points = [];
 
-let last = { x: 0, y: 0 };
-
 window.addEventListener("resize", () => {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 });
 
 window.addEventListener("mousemove", (e) => {
-  const dx = e.clientX - last.x;
-  const dy = e.clientY - last.y;
+  points.push({ x: e.clientX, y: e.clientY });
 
-  const speed = Math.sqrt(dx * dx + dy * dy);
-
-  points.push({
-    x: e.clientX,
-    y: e.clientY,
-    vx: dx,
-    vy: dy,
-    speed: speed,
-    life: 1
-  });
-
-  last = { x: e.clientX, y: e.clientY };
-
-  if (points.length > 120) {
+  if (points.length > 80) {
     points.shift();
   }
 });
 
 function draw() {
-  // slow dreamy fade (not full clear)
-  ctx.fillStyle = "rgba(254, 252, 251, 0.12)";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   ctx.lineJoin = "round";
   ctx.lineCap = "round";
@@ -263,16 +241,12 @@ function draw() {
     const p1 = points[i - 1];
     const p2 = points[i];
 
-    p2.life *= 0.98;
-
-    const pressure = Math.min(p2.speed * 0.08, 6);
-
     ctx.beginPath();
     ctx.moveTo(p1.x, p1.y);
     ctx.lineTo(p2.x, p2.y);
 
-    ctx.strokeStyle = `rgba(0, 119, 182, ${p2.life * 0.4})`;
-    ctx.lineWidth = pressure;
+    ctx.strokeStyle = "rgba(0, 119, 182, 0.35)";
+    ctx.lineWidth = 2;
 
     ctx.stroke();
   }
