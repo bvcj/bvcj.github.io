@@ -19,41 +19,38 @@ body {
   padding: 40px 20px;
 }
 
-/* 🌊 BACKGROUND HAND-DRAWN LAYER */
+/* 🌊 BACKGROUND LAYER */
 .bg-squiggle {
   position: fixed;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
+  inset: 0;
   z-index: -1;
   pointer-events: none;
-  overflow: visible; /* Ensure visibility of squiggles */
-  width: 100%;
-  height: 300px; /* Set height to control visible space for squiggles */
+  overflow: hidden;
 }
 
-/* 🧠 HAND-DRAWN SQUIGGLES WITH LOOPS */
+/* 🧠 ORGANIC SQUIGGLE SYSTEM (non-geometric, multi-layer) */
 .bg-squiggle::before {
   content: "";
   position: absolute;
-  width: 200%;
-  height: 200%;
-  left: -50%;
-  top: 50%; /* Move the squiggles closer to the bottom */
+  width: 300%;
+  height: 300%;
+  left: -100%;
+  top: -100%;
 
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1000' height='1000' viewBox='0 0 1000 1000'%3E%3Cpath d='M0 650 C100 550, 200 700, 300 600 C400 500, 500 750, 600 650 C700 550, 800 700, 900 600' stroke='%2319A0DB' stroke-width='3.2' fill='none' stroke-linecap='round' opacity='0.65'/%3E%3Cpath d='M-50 720 C70 600, 170 800, 270 720 C370 640, 470 850, 570 770 C670 690, 770 890, 870 810' stroke='%2319A0DB' stroke-width='2.8' fill='none' stroke-linecap='round' opacity='0.6'/%3E%3Cpath d='M0 850 C100 750, 200 900, 300 800 C400 700, 500 950, 600 850 C700 750, 800 900, 900 800' stroke='%2319A0DB' stroke-width='2.6' fill='none' stroke-linecap='round' opacity='0.55'/%3E%3Cpath d='M-70 780 C30 670, 130 840, 230 760 C330 680, 430 890, 530 810 C630 730, 730 900, 830 820' stroke='%2319A0DB' stroke-width='2.4' fill='none' stroke-linecap='round' opacity='0.5'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1000' height='1000' viewBox='0 0 1000 1000'%3E%3Cpath d='M-120 180 C100 100, 200 400, 350 200 C500 0, 600 500, 750 200 C900 -100, 1000 300, 1120 200' stroke='%2319A0DB' stroke-width='2.4' fill='none' stroke-linecap='round' opacity='0.75'/%3E%3Cpath d='M-160 400 C-20 280, 200 500, 400 380 C600 260, 700 560, 900 440 C1100 320, 1200 620, 1400 500' stroke='%2319A0DB' stroke-width='2.1' fill='none' stroke-linecap='round' opacity='0.65'/%3E%3Cpath d='M-140 600 C-20 450, 180 800, 400 600 C620 400, 750 750, 900 600 C1050 450, 1200 850, 1400 720' stroke='%2319A0DB' stroke-width='1.9' fill='none' stroke-linecap='round' opacity='0.55'/%3E%3Cpath d='M0 150 C180 250, 300 -30, 480 150 C660 330, 780 0, 960 200 C1140 400, 1260 100, 1440 300' stroke='%2319A0DB' stroke-width='1.7' fill='none' stroke-linecap='round' opacity='0.5'/%3E%3C/svg%3E");
 
   background-size: cover;
-  animation: drift 90s ease-in-out infinite;
-  filter: blur(1px); /* Increase blur for softening */
-  opacity: 0.15; /* Increase opacity for better visibility */
+  animation: drift 80s ease-in-out infinite;
+  filter: blur(0.75px);
+  opacity: 0.22;
 }
 
-/* 🌬 Hand-drawn style motion */
+/* 🌬 more organic motion (less mechanical, more “breathing system”) */
 @keyframes drift {
   0%   { transform: translate(0px, 0px) scale(1); }
-  33%  { transform: translate(-20px, -10px) scale(1.02); }
-  66%  { transform: translate(30px, -20px) scale(0.98); }
+  25%  { transform: translate(-30px, -10px) scale(1.02); }
+  50%  { transform: translate(20px, -35px) scale(0.98); }
+  75%  { transform: translate(-10px, 25px) scale(1.05); }
   100% { transform: translate(0px, 0px) scale(1); }
 }
 
