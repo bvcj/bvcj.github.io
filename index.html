@@ -113,6 +113,20 @@ button:hover {
   color: #000814;
 }
 
+/* ✅ FIXED CHECKBOX ALIGNMENT */
+.consent {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  font-size: 13px;
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+.consent span {
+  flex: 1;
+}
+
 footer {
   margin-top: 60px;
   font-size: 13px;
@@ -198,8 +212,8 @@ footer {
 
       <textarea id="message" rows="6" placeholder="What would you like to work on / speak about?"></textarea>
 
-      <!-- CONSENT CHECKBOX -->
-      <label style="display:flex; gap:8px; align-items:flex-start; font-size:13px; margin-bottom:15px;">
+      <!-- CONSENT CHECKBOX (FIXED ALIGNMENT) -->
+      <label class="consent">
         <input type="checkbox" id="consent" style="margin-top:3px;">
         <span>
           I consent to my information being used to respond to my inquiry and understand it will be kept confidential
