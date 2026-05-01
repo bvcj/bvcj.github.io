@@ -19,7 +19,7 @@ body {
   padding: 40px 20px;
 }
 
-/* INK CURSOR CANVAS */
+/* CANVAS */
 #cursorCanvas {
   position: fixed;
   top: 0;
@@ -155,33 +155,78 @@ button:hover {
 
   <div class="grid">
 
+    <!-- ABOUT -->
     <div>
       <h2>ABOUT</h2>
       <div class="small">
-        Psychoanalytic psychotherapist working at the fracture points of war, identity, and psyche.
+        Yuliia Leites is a psychoanalytic psychotherapist from Kyiv, Ukraine, and a candidate of the International Psychoanalytical Association (IPA).<br><br>
+        Her practice sits at the fracture points of war and social upheaval — with civilians, soldiers and queer people.<br><br>
+        As a member of the Ukrainian Psychedelic Research Association (UPRA), she brings psychoanalytic thinking into psychedelic-assisted therapy — a radical method for a radical age.
       </div>
     </div>
 
+    <!-- PUBLICATIONS -->
     <div>
+
       <h2>PUBLICATIONS</h2>
       <ul class="list">
-        <li><a class="link" href="#">Example</a></li>
+        <li>
+          <a class="link" href="https://www.e-flux.com/notes/6783384/from-mania-to-depression-full-scale-war-in-ukraine" target="_blank">
+            From Mania to Depression — e-flux
+          </a>
+        </li>
+        <li>
+          <a class="link" href="https://thediasporist.de/not-ready-for-the-light/" target="_blank">
+            Not Ready for the Light — The Diasporist
+          </a>
+        </li>
+        <li>
+          <a class="link" href="https://www.spectorbooks.com/book/notes-on-living" target="_blank">
+            Notes on Living — Spector Books
+          </a>
+        </li>
       </ul>
+
+      <h2>EVENTS</h2>
+      <ul class="list">
+        <li>
+          <a class="link" href="https://www.schinkelpavillon.de/event/booklaunch-panel-discussion-notes-on-living-reflections-on-ukraine-today" target="_blank">
+            Schinkel Pavillon Berlin — Book Launch & Discussion
+          </a>
+        </li>
+        <li>European Psychoanalytic Federation Conference 2026</li>
+      </ul>
+
     </div>
 
+    <!-- CONTACT -->
     <div>
 
       <h2>CONTACT</h2>
 
+      <div class="small" style="margin-bottom:10px;">
+        Clinical inquiries / therapeutic work
+      </div>
+
       <input type="text" id="name" placeholder="Your name">
-      <textarea id="message" rows="6" placeholder="What would you like to work on?"></textarea>
+
+      <textarea id="message" rows="6" placeholder="What would you like to work on / speak about?"></textarea>
 
       <label class="consent">
         <input type="checkbox" id="consent">
-        <span>I consent to my information being used to respond to my inquiry and understand it will be kept confidential</span>
+        <span>
+          I consent to my information being used to respond to my inquiry and understand it will be kept confidential
+        </span>
       </label>
 
       <button onclick="sendEmail()">Send Inquiry</button>
+
+      <div class="small" style="margin-bottom:15px;">
+        Direct email: <br>
+        <a class="link" href="mailto:yuliialeites@gmail.com">
+          yuliialeites@gmail.com
+        </a>
+      </div>
 
     </div>
 
@@ -208,7 +253,10 @@ function sendEmail() {
 }
 </script>
 
-<!-- INK CURSOR SCRIPT (FIXED + SIMPLE LINE) -->
+<!-- ========================= -->
+<!-- FADE MEMORY INK CURSOR -->
+<!-- ========================= -->
+
 <script>
 const canvas = document.getElementById("cursorCanvas");
 const ctx = canvas.getContext("2d");
@@ -224,9 +272,13 @@ window.addEventListener("resize", () => {
 });
 
 window.addEventListener("mousemove", (e) => {
-  points.push({ x: e.clientX, y: e.clientY });
+  points.push({
+    x: e.clientX,
+    y: e.clientY,
+    alpha: 1
+  });
 
-  if (points.length > 80) {
+  if (points.length > 120) {
     points.shift();
   }
 });
@@ -234,18 +286,21 @@ window.addEventListener("mousemove", (e) => {
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  ctx.lineJoin = "round";
   ctx.lineCap = "round";
+  ctx.lineJoin = "round";
 
   for (let i = 1; i < points.length; i++) {
     const p1 = points[i - 1];
     const p2 = points[i];
 
+    // fade older points slowly (memory effect)
+    p2.alpha *= 0.96;
+
     ctx.beginPath();
     ctx.moveTo(p1.x, p1.y);
     ctx.lineTo(p2.x, p2.y);
 
-    ctx.strokeStyle = "rgba(0, 119, 182, 0.35)";
+    ctx.strokeStyle = `rgba(0, 119, 182, ${p2.alpha * 0.5})`;
     ctx.lineWidth = 2;
 
     ctx.stroke();
