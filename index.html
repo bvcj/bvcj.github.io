@@ -19,6 +19,38 @@ body {
   padding: 40px 20px;
 }
 
+/* 🌊 BACKGROUND SQUIGGLE LAYER */
+.bg-squiggle {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.10;
+  overflow: hidden;
+}
+
+.bg-squiggle::before {
+  content: "";
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  left: -50%;
+  top: -50%;
+
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='800' viewBox='0 0 800 800'%3E%3Cpath d='M0 400 C150 300, 250 500, 400 400 C550 300, 650 500, 800 400' stroke='%2319A0DB' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3Cpath d='M0 200 C150 100, 250 300, 400 200 C550 100, 650 300, 800 200' stroke='%2319A0DB' stroke-width='1.5' fill='none' stroke-linecap='round' opacity='0.6'/%3E%3Cpath d='M0 600 C150 500, 250 700, 400 600 C550 500, 650 700, 800 600' stroke='%2319A0DB' stroke-width='1.5' fill='none' stroke-linecap='round' opacity='0.6'/%3E%3C/svg%3E");
+
+  background-size: cover;
+  animation: drift 40s linear infinite;
+  filter: blur(0.4px);
+}
+
+@keyframes drift {
+  0%   { transform: translateY(0px); }
+  50%  { transform: translateY(-40px); }
+  100% { transform: translateY(0px); }
+}
+
+/* MAIN LAYOUT */
 .container {
   max-width: 1100px;
   margin: 0;
@@ -96,7 +128,7 @@ input, textarea {
   outline: none;
 }
 
-/* ✅ FIX: prevent checkbox from inheriting full width */
+/* FIX checkbox width */
 input[type="checkbox"] {
   width: auto;
 }
@@ -138,6 +170,9 @@ footer {
 </head>
 
 <body>
+
+<!-- 🌊 BACKGROUND -->
+<div class="bg-squiggle"></div>
 
 <div class="container">
 
@@ -203,7 +238,6 @@ footer {
 
       <textarea id="message" rows="6" placeholder="What would you like to work on / speak about?"></textarea>
 
-      <!-- CHECKBOX (FIXED + SAFE) -->
       <label style="display:flex; align-items:flex-start; gap:8px; font-size:13px; margin-bottom:15px; width:100%;">
         <input type="checkbox" id="consent" style="margin-top:3px; width:auto;">
         <span style="flex:1;">
