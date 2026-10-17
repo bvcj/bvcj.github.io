@@ -1,0 +1,659 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#244DE3">
+  <meta name="description" content="Overand Institute for Recovery Technologies researches psychotherapy, culture, and emerging technologies.">
+  <title>Overand Institute for Recovery Technologies</title>
+
+  <!-- Typography: Hind Madurai -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Madurai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --blue: #244DE3;
+      --blue-dark: #1938AC;
+      --paper: #FAF8F2;
+      --ink: #244DE3;
+      --muted: #72768A;
+      --line: rgba(36, 77, 227, 0.24);
+      --font: "Hind Madurai", sans-serif;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--font);
+      font-weight: 400;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button, input {
+      font: inherit;
+    }
+
+    ::selection {
+      background: var(--blue);
+      color: white;
+    }
+
+    .container {
+      width: min(100% - 64px, 1440px);
+      margin-inline: auto;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .wordmark {
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      max-width: 230px;
+      line-height: 1.25;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      font-size: 13px;
+    }
+
+    .nav a {
+      transition: opacity 180ms ease;
+    }
+
+    .nav a:hover {
+      opacity: 0.55;
+    }
+
+    .nav-cta {
+      border: 1px solid var(--blue);
+      border-radius: 999px;
+      padding: 9px 17px;
+    }
+
+    .hero {
+      padding: 96px 0 80px;
+    }
+
+    .eyebrow {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .hero h1 {
+      max-width: 1000px;
+      margin-top: 26px;
+      font-size: clamp(52px, 9vw, 124px);
+      line-height: 0.98;
+      font-weight: 400;
+      letter-spacing: -0.065em;
+    }
+
+    .hero-note {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 32px;
+      margin-top: 42px;
+    }
+
+    .hero-note p {
+      max-width: 430px;
+      font-size: 17px;
+    }
+
+    .hero-note .aside {
+      font-size: 12px;
+      text-align: right;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .hero-panel {
+      margin-top: 70px;
+      padding: 34px;
+      background: var(--blue);
+      color: white;
+      min-height: 330px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .hero-panel h2 {
+      max-width: 850px;
+      font-size: clamp(34px, 5.5vw, 76px);
+      font-weight: 400;
+      line-height: 1.08;
+      letter-spacing: -0.045em;
+    }
+
+    .hero-panel p {
+      max-width: 520px;
+      font-size: 16px;
+
+    
+    #top {
+      scroll-margin-top: 20px;
+    }
+
+    .site-footer {
+      background: var(--blue);
+      color: var(--paper);
+      padding: 45px 0 24px;
+    }
+
+    .footer-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 20px;
+      padding-bottom: 35px;
+      border-bottom: 1px solid rgba(250, 248, 242, 0.35);
+    }
+
+    .back-to-top {
+      font-size: 13px;
+      border: 1px solid rgba(250, 248, 242, 0.65);
+      border-radius: 999px;
+      padding: 8px 15px;
+      transition: background 180ms ease, color 180ms ease;
+    }
+
+    .back-to-top:hover {
+      background: var(--paper);
+      color: var(--blue);
+    }
+
+    .footer-main {
+      padding: 70px 0 90px;
+    }
+
+    .footer-main h2 {
+      font-size: clamp(48px, 8vw, 104px);
+      font-weight: 400;
+      line-height: 0.98;
+      letter-spacing: -0.06em;
+      margin-bottom: 55px;
+    }
+
+    .footer-main p {
+      max-width: 610px;
+      margin-top: 22px;
+      font-size: 16px;
+      line-height: 1.8;
+    }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      padding-top: 22px;
+      border-top: 1px solid rgba(250, 248, 242, 0.35);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+    }
+
+    @media (max-width: 700px) {
+      .site-footer {
+        padding-top: 30px;
+      }
+
+      .footer-main {
+        padding: 55px 0 60px;
+      }
+
+      .footer-main h2 {
+        margin-bottom: 35px;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .footer-top {
+        align-items: flex-start;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *,
+      *::before,
+      *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+      }
+  
+    }
+  </style>
+</head>
+<body id="top">
+  <header class="container">
+    <div class="topbar">
+      <a href="#" class="wordmark">OVERAND INSTITUTE<br>FOR RECOVERY TECHNOLOGIES</a>
+      <nav class="nav" aria-label="Main navigation">
+        <a href="#about">About</a>
+        <a href="#programme">Programme</a>
+        <a href="#research">Research</a>
+        <a href="#participate" class="nav-cta">Participate ↗</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="container hero">
+      <p class="eyebrow">A Ukraine-rooted institute · Est. 2026</p>
+      <h1>Overand Institute for Recovery Technologies</h1>
+      <div class="hero-note">
+        <p>Overand — what comes over and after: the rapture.</p>
+        <p class="aside">Research / Culture /<br>Collective recovery</p>
+      </div>
+      <div class="hero-panel">
+        <p class="eyebrow">01 — The question</p>
+        <h2>Technology is turning toward the psyche.</h2>
+        <p>Ukraine can lead the new field of recovery technologies.</p>
+      </div>
+    </section>
+
+    <section class="container" id="about">
+      <div class="intro-grid">
+        <div class="section-label">
+          <span>01 / CONTEXT</span>
+          <span>Why Overand</span>
+        </div>
+        <div class="intro-content">
+          <h2>An entire society living through change.</h2>
+          <p>
+            Entering its fifth year of full-scale war, Ukraine's army
+            includes hundreds of thousands of civilians who, only a few
+            years ago, were designers, artists, lawyers, engineers, or
+            office workers. As they cycle in and out of military
+            rotations, society as a whole is undergoing profound change.
+          </p>
+          <p>
+            Ukraine has become a global center for defense innovation,
+            yet only a small share of that innovation focuses on how
+            people survive and recover from hyper-mediated warfare.
+            Mental health and social recovery tools remain generic.
+            We see this asymmetry as a critical tech-justice problem.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="container" id="research">
+      <div class="research-block">
+        <p class="eyebrow">02 — An emerging field</p>
+        <h2>
+          Technology is turning<br>
+          toward the psyche.
+        </h2>
+        <p class="research-lead">
+          Ukraine can lead the new field of recovery technologies.
+        </p>
+        <div class="research-copy">
+          <p>
+            The technology industry everywhere is turning toward the
+            psyche: attention, sleep, stress and mood are now design
+            problems, increasingly addressed through biometric wearables,
+            spatial and binaural audio, VR exposure environments,
+            neurofeedback, and conversational AI positioned as a first
+            line of psychological support.
+          </p>
+          <p>
+            Nearly all of this is calibrated for peacetime cognition,
+            with little research on how contemporary war affects the
+            mind. Decades after Harun Farocki documented video games
+            being used to treat PTSD, post-war recovery demands a new
+            body of work.
+          </p>
+          <p>
+            Ukraine can become a leader in this emerging field,
+            creating open-source knowledge that can be adapted elsewhere.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="container" id="mission">
+      <div class="section-label">
+        <span>03 / THE INSTITUTE</span>
+        <span>Who we are</span>
+      </div>
+      <div class="mission-content">
+        <h2>What is Overand Institute?</h2>
+        <p>
+          A Ukraine-rooted nonprofit in formation, founded by professor
+          Bogna Konior and psychoanalyst Yuliia Leites, working at the
+          intersection of psychoanalysis, culture, and new recovery
+          technologies.
+        </p>
+      </div>
+    </section>
+
+    <section class="container" id="programme">
+      <div class="programme-header">
+        <div class="section-label">
+          <span>04 / FIELDWORK</span>
+          <span>Kyiv, Ukraine</span>
+        </div>
+        <h2>The Kyiv music programme<br>+ psychotherapy</h2>
+        <p class="programme-intro">
+          Sound is not only something we experience.
+          It can become something we shape, understand,
+          and use to recover a sense of agency.
+        </p>
+      </div>
+
+      <div class="programme-grid">
+        <article class="programme-item">
+          <span class="eyebrow">01 — The problem</span>
+          <h3>Sonic warfare</h3>
+          <p>
+            Psychiatrists at Kyiv's military hospital use
+            “dronophobia” for a new subset of shell shock:
+            scooters, fans, air conditioners, and bees can
+            reproduce the sound of a drone and trigger panic
+            in civilian life.
+          </p>
+        </article>
+
+        <article class="programme-item">
+          <span class="eyebrow">02 — The method</span>
+          <h3>Sound as recovery technology</h3>
+          <p>
+            Across 32 music-composition lessons interlaced
+            with collective psychotherapy, workshops, and
+            listening labs, participants transform feared
+            sounds into material they can shape, compose,
+            and perform.
+          </p>
+          <p>
+            The shift is from being involuntarily affected
+            by sound to becoming its author — gaining agency
+            over material that resists ordinary speech.
+          </p>
+        </article>
+
+        <article class="programme-item programme-feature">
+          <span class="eyebrow">03 — The gathering</span>
+          <h3>A protected graduation rave</h3>
+          <p>
+            The programme culminates in a protected
+            graduation rave, where soldiers share creative
+            work and wartime experiences with civilians.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section class="container" id="stages">
+      <div class="stages-heading">
+        <p class="eyebrow">05 / FROM PILOT TO INFRASTRUCTURE</p>
+        <h2>Three stages<br>of the pilot.</h2>
+      </div>
+
+      <div class="stage-row">
+        <div class="stage-number">01</div>
+        <div class="stage-name">
+          <p class="eyebrow">Stage one</p>
+          <h3>Test the model</h3>
+        </div>
+        <div class="stage-description">
+          <p>
+            Rebuild the course as a hybrid national resource
+            for 50+ participants; establish evaluation and
+            safeguarding; map Ukrainian recovery technologies.
+          </p>
+        </div>
+      </div>
+
+      <div class="stage-row">
+        <div class="stage-number">02</div>
+        <div class="stage-name">
+          <p class="eyebrow">Stage two</p>
+          <h3>Build a school</h3>
+        </div>
+        <div class="stage-description">
+          <p>
+            Expand to 500+ participants and multiple tracks;
+            train facilitators; formalize veteran-care ties;
+            launch international R&D with Stella Matutina
+            and NYU.
+          </p>
+        </div>
+      </div>
+
+      <div class="stage-row">
+        <div class="stage-number">03</div>
+        <div class="stage-name">
+          <p class="eyebrow">Stage three</p>
+          <h3>Transfer</h3>
+        </div>
+        <div class="stage-description">
+          <p>
+            Embed the curriculum in universities and
+            rehabilitation centres; support regional delivery
+            and a national festival; transition to Ukrainian
+            local leadership.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="container" id="recovery">
+      <div class="recovery-header">
+        <p class="eyebrow">06 / A WORKING DEFINITION</p>
+        <h2>What are recovery<br>technologies?</h2>
+      </div>
+
+      <div class="definition-row">
+        <span class="definition-number">01</span>
+        <p>
+          A method, tool or protocol for cognitive health,
+          collective agency and a return to public life —
+          not only a clinical treatment.
+        </p>
+      </div>
+
+      <div class="definition-row">
+        <span class="definition-number">02</span>
+        <p>
+          Built with those who use it: veterans, soldiers,
+          civilians, clinicians, engineers and artists
+          in one room.
+        </p>
+      </div>
+
+      <div class="definition-row">
+        <span class="definition-number">03</span>
+        <p>
+          Tested in real settings, not laboratories —
+          studios, clubs, clinics and homes.
+        </p>
+      </div>
+
+      <div class="definition-row">
+        <span class="definition-number">04</span>
+        <p>
+          Documented and open-source, so knowledge produced
+          in Ukraine can travel, change and be used elsewhere.
+        </p>
+      </div>
+
+      <p class="recovery-note">
+        Sound is the first field of practice. Further research
+        extends this model into spatial audio, AR/VR, biosensors,
+        neurofeedback, and AI-assisted therapeutic tools grounded
+        in clinical and lived reality.
+      </p>
+    </section>
+
+    <section class="container" id="partners">
+      <div class="partners-heading">
+        <p class="eyebrow">07 / COLLABORATION</p>
+        <h2>Strategic partner<br>ecosystem.</h2>
+      </div>
+
+      <div class="partner-row">
+        <div class="partner-category">Local infrastructure</div>
+        <div class="partner-description">
+          Module Exchange (pedagogy), Kyrylivska club k41
+          (showcases), and Dim Zvuku Lviv.
+        </div>
+      </div>
+
+      <div class="partner-row">
+        <div class="partner-category">Clinical &amp; tech R&amp;D</div>
+        <div class="partner-description">
+          Ukrainian biometrics (Airest), psychotherapeutic
+          evaluation frameworks, and spatial audio labs.
+        </div>
+      </div>
+
+      <div class="partner-row">
+        <div class="partner-category">Global R&amp;D labs</div>
+        <div class="partner-description">
+          Stella Matutina R&amp;D School in Lucerne,
+          Switzerland, for frontier tools including AR/VR
+          and biosensors.
+        </div>
+      </div>
+
+      <div class="partner-row">
+        <div class="partner-category">Academic engines</div>
+        <div class="partner-description">
+          NYU for research, student exchange, and clinical
+          psychology evaluation.
+        </div>
+      </div>
+    </section>
+
+    <section class="container" id="participate">
+      <div class="participate-header">
+        <p class="eyebrow">08 / GET INVOLVED</p>
+        <h2>Recovery is a<br>collective project.</h2>
+        <p>
+          Help build the research, tools and networks that
+          make recovery possible beyond one course or city.
+        </p>
+      </div>
+
+      <div class="participate-grid">
+        <article class="participate-card">
+          <span class="eyebrow">01</span>
+          <h3>Funders</h3>
+          <p>
+            Co-fund national pilot scaling alongside existing
+            anchor supporters.
+          </p>
+        </article>
+
+        <article class="participate-card">
+          <span class="eyebrow">02</span>
+          <h3>Artists &amp; venues</h3>
+          <p>
+            Offer mentorship, host listening labs, and include
+            veteran artists on international lineups.
+          </p>
+        </article>
+
+        <article class="participate-card">
+          <span class="eyebrow">03</span>
+          <h3>Universities</h3>
+          <p>
+            Co-develop evaluation methodologies, host
+            placements, and publish bilingual research.
+          </p>
+        </article>
+
+        <article class="participate-card">
+          <span class="eyebrow">04</span>
+          <h3>Clinicians &amp; technologists</h3>
+          <p>
+            Join safeguarding boards or build frontier
+            recovery tools using VR, biosensors, and AI.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <div class="container">
+        <div class="footer-top">
+          <p class="eyebrow">OVERAND INSTITUTE FOR<br>RECOVERY TECHNOLOGIES</p>
+          <a href="#top" class="back-to-top">Back to top ↑</a>
+        </div>
+
+        <div class="footer-main">
+          <h2>What comes over<br>and after.</h2>
+          <p>
+            The Overand Institute for Recovery Technologies is a
+            nonprofit in formation, founded by professor Bogna Konior
+            and psychotherapist Yuliia Leites.
+          </p>
+          <p>
+            Working at the intersection of emerging technologies
+            and psychotherapy, we study how technologically
+            accelerated modern warfare affects the human psyche.
+            We develop open-source tools and homecoming protocols
+            that support cognitive health and collective agency.
+          </p>
+        </div>
+
+        <div class="footer-bottom">
+          <span>Ukraine-rooted. Open to the world.</span>
+          <span>Research / Culture / Recovery</span>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+      link.addEventListener('click', event => {
+        const target = document.querySelector(link.getAttribute('href'));
+        if (target) {
+          event.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    });
+  </script>
+</body>
+</html>
