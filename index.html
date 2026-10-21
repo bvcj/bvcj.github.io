@@ -86,30 +86,32 @@
         color: var(--cobalt)
     }
 
-    .title-box {
-        position: relative;
-        z-index: 1;
-        display: block;
-        text-decoration: none;
-        color: var(--cobalt);
-        background: var(--paper);
-        border: 1px solid var(--cobalt);
-        padding: 1.2rem clamp(1.6rem, 5vw, 4rem) 1.4rem;
-        font: 300 clamp(2.6rem, 9vw, 6rem) /1 var(--f-title);
-        letter-spacing: .04em;
-        text-align: center;
-        text-transform: uppercase;
-        transition: background .4s, color .4s
-    }
+   .title-box {
+    position: relative;
+    z-index: 1;
+    display: block;
+    text-decoration: none;
+    color: var(--cobalt);
+    background: var(--paper);
+    border: 1px solid var(--cobalt);
+    padding: 1.2rem clamp(1.6rem, 5vw, 4rem) 1.4rem;
+    font: 300 clamp(2.6rem, 9vw, 6rem) / 1 var(--f-title);
+    letter-spacing: .04em;
+    text-align: center;
+    transition: background .4s, color .4s;
+}
 
-    .title-box small {
-        display: block;
-        margin-top: .7rem;
-        font-size: .22em;
-        letter-spacing: .35em;
-        text-transform: lowercase;
-    }
+.title-box {
+    text-transform: uppercase;
+}
 
+.title-box small {
+    display: block;
+    margin-top: .7rem;
+    font-size: .22em;
+    letter-spacing: .35em;
+    text-transform: lowercase;
+}
     .title-box:hover, .title-box:focus-visible {
         background: var(--cobalt);
         color: var(--paper);
