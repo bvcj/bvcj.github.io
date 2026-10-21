@@ -1,659 +1,473 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#244DE3">
-  <meta name="description" content="Overand Institute for Recovery Technologies researches psychotherapy, culture, and emerging technologies.">
-  <title>Overand Institute for Recovery Technologies</title>
-
-  <!-- Typography: Hind Madurai -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Hind+Madurai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-  <style>
-    :root {
-      --blue: #244DE3;
-      --blue-dark: #1938AC;
-      --paper: #FAF8F2;
-      --ink: #244DE3;
-      --muted: #72768A;
-      --line: rgba(36, 77, 227, 0.24);
-      --font: "Hind Madurai", sans-serif;
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Overand Institute</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300&family=Pirata+One&display=swap" rel="stylesheet">
+    <style>
+    /* ---- Your fonts: drop the files in /fonts and they take over automatically.
+       Until then, Cormorant Garamond Light and Pirata One stand in. ---- */
+    @font-face {
+        font-family: "Hershey Noailles Times Triplex Light";
+        font-display: swap;
+        src: local("Hershey-Noailles-Times-Triplex-Light"), local("Hershey Noailles Times Triplex Light"), url("fonts/Hershey-Noailles-Times-Triplex-Light.woff2") format("woff2"), url("fonts/Hershey-Noailles-Times-Triplex-Light.otf") format("opentype")
     }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    @font-face {
+        font-family: "Hershey Noailles OldFrench Regular";
+        font-display: swap;
+        src: url("fonts/Hershey-Noailles-OldFrench-Regular.otf") format("opentype")
+    }
+
+    :root {
+        --paper: #f4f1e8;
+        --ink: #0d0d0d;
+        --cobalt: #0047ab;
+        --line: rgba(0, 71, 171, .28);
+        --tl: rgba(0, 71, 171, .55);
+        --f-title: "Hershey Noailles Times Triplex Light", "Cormorant Garamond", Georgia, serif;
+        --f-index: "Hershey Noailles OldFrench Regular", "Pirata One", Georgia, serif;
+        --hero-image: none;
+        /* e.g. url("data:image/jpeg;base64,...") or url("hero.jpg") */
+        color-scheme: light;
+        box-sizing: border-box;
+        padding-top: env(safe-area-inset-top, 0px);
+        padding-bottom: env(safe-area-inset-bottom, 0px);
     }
 
     html {
-      scroll-behavior: smooth;
+        scroll-behavior: smooth;
+        scroll-padding-top: env(safe-area-inset-top, 0px)
     }
 
     body {
-      background: var(--paper);
-      color: var(--ink);
-      font-family: var(--font);
-      font-weight: 400;
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
+        margin: 0;
+        background: var(--paper);
+        color: var(--ink)
     }
 
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    button, input {
-      font: inherit;
-    }
-
-    ::selection {
-      background: var(--blue);
-      color: white;
-    }
-
-    .container {
-      width: min(100% - 64px, 1440px);
-      margin-inline: auto;
-    }
-
-    .topbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 24px 0;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .wordmark {
-      font-size: 15px;
-      font-weight: 600;
-      letter-spacing: 0.02em;
-      max-width: 230px;
-      line-height: 1.25;
-    }
-
-    .nav {
-      display: flex;
-      align-items: center;
-      gap: 28px;
-      font-size: 13px;
-    }
-
-    .nav a {
-      transition: opacity 180ms ease;
-    }
-
-    .nav a:hover {
-      opacity: 0.55;
-    }
-
-    .nav-cta {
-      border: 1px solid var(--blue);
-      border-radius: 999px;
-      padding: 9px 17px;
-    }
-
+    html.light-cursor, html.light-cursor * {
+        cursor: none !important
+    }/* Hero */
     .hero {
-      padding: 96px 0 80px;
+        position: relative;
+        min-height: 100vh;
+        min-height: 100svh;
+        display: grid;
+        align-items: center;
+        justify-items: end;
+        padding: 0 clamp(1.2rem, 8vw, 7rem);
+        box-sizing: border-box;
+        overflow: hidden
     }
 
-    .eyebrow {
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
+    .hero-image {
+        position: absolute;
+        inset: 0;
+        background: var(--hero-image) center/cover no-repeat
     }
 
-    .hero h1 {
-      max-width: 1000px;
-      margin-top: 26px;
-      font-size: clamp(52px, 9vw, 124px);
-      line-height: 0.98;
-      font-weight: 400;
-      letter-spacing: -0.065em;
+    .hero-image.empty {
+        background:
+        repeating-linear-gradient(135deg, transparent 0 22px, var(--line) 22px 23px), var(--paper)
     }
 
-    .hero-note {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      gap: 32px;
-      margin-top: 42px;
+    .hero-image.empty::after {
+        content: "image";
+        position: absolute;
+        left: clamp(1rem, 3vw, 2rem);
+        bottom: 1.2rem;
+        font: 300 .9rem var(--f-title);
+        letter-spacing: .3em;
+        text-transform: uppercase;
+        color: var(--cobalt)
     }
 
-    .hero-note p {
-      max-width: 430px;
-      font-size: 17px;
+    .title-box {
+        position: relative;
+        z-index: 1;
+        display: block;
+        text-decoration: none;
+        color: var(--cobalt);
+        background: var(--paper);
+        border: 1px solid var(--cobalt);
+        padding: 1.2rem clamp(1.6rem, 5vw, 4rem) 1.4rem;
+        font: 300 clamp(2.6rem, 9vw, 6rem) /1 var(--f-title);
+        letter-spacing: .04em;
+        text-align: center;
+        transition: background .4s, color .4s
     }
 
-    .hero-note .aside {
-      font-size: 12px;
-      text-align: right;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
+    .title-box small {
+        display: block;
+        margin-top: .7rem;
+        font-size: .22em;
+        letter-spacing: .35em;
+        text-transform: uppercase
     }
 
-    .hero-panel {
-      margin-top: 70px;
-      padding: 34px;
-      background: var(--blue);
-      color: white;
-      min-height: 330px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
+    .title-box:hover, .title-box:focus-visible {
+        background: var(--cobalt);
+        color: var(--paper);
+        outline: none
+    }/* Index as a tree outline */
+    main {
+        max-width: 48rem;
+        margin: 0 auto;
+        padding: 5rem clamp(1.2rem, 5vw, 2rem) 6rem;
+        font-family: var(--f-index)
     }
 
-    .hero-panel h2 {
-      max-width: 850px;
-      font-size: clamp(34px, 5.5vw, 76px);
-      font-weight: 400;
-      line-height: 1.08;
-      letter-spacing: -0.045em;
+    .tree {
+        --fs: clamp(1.2rem, 3.4vw, 1.7rem);
+        list-style: none;
+        margin: 0;
+        padding: 0
     }
 
-    .hero-panel p {
-      max-width: 520px;
-      font-size: 16px;
-
-    
-    #top {
-      scroll-margin-top: 20px;
+    .root-label {
+        font-size: var(--fs);
+        line-height: 1.3;
+        margin: 0 0 .1rem;
+        color: var(--cobalt)
     }
 
-    .site-footer {
-      background: var(--blue);
-      color: var(--paper);
-      padding: 45px 0 24px;
+    .index {
+        padding-left: .5rem
     }
 
-    .footer-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 20px;
-      padding-bottom: 35px;
-      border-bottom: 1px solid rgba(250, 248, 242, 0.35);
+    .tree li {
+        position: relative;
+        padding-left: 1.8rem
     }
 
-    .back-to-top {
-      font-size: 13px;
-      border: 1px solid rgba(250, 248, 242, 0.65);
-      border-radius: 999px;
-      padding: 8px 15px;
-      transition: background 180ms ease, color 180ms ease;
+    .tree li::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        border-left: 1px solid var(--tl)
     }
 
-    .back-to-top:hover {
-      background: var(--paper);
-      color: var(--blue);
+    .tree li::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: calc(.6rem + var(--fs) * .65);
+        width: 1.3rem;
+        border-top: 1px solid var(--tl)
     }
 
-    .footer-main {
-      padding: 70px 0 90px;
+    .tree li:last-child::before {
+        bottom: auto;
+        height: calc(.6rem + var(--fs) * .65)
     }
 
-    .footer-main h2 {
-      font-size: clamp(48px, 8vw, 104px);
-      font-weight: 400;
-      line-height: 0.98;
-      letter-spacing: -0.06em;
-      margin-bottom: 55px;
+    .item {
+        color: var(--ink);
+        transition: color .35s
     }
 
-    .footer-main p {
-      max-width: 610px;
-      margin-top: 22px;
-      font-size: 16px;
-      line-height: 1.8;
+    .item:hover, .item:focus-within {
+        color: var(--cobalt)
     }
 
-    .footer-bottom {
-      display: flex;
-      justify-content: space-between;
-      gap: 20px;
-      padding-top: 22px;
-      border-top: 1px solid rgba(250, 248, 242, 0.35);
-      font-size: 11px;
-      letter-spacing: 0.08em;
+    .group {
+        padding: .6rem 0;
+        font-size: var(--fs);
+        line-height: 1.3
     }
 
-    @media (max-width: 700px) {
-      .site-footer {
-        padding-top: 30px;
-      }
+    .index button {
+        all: unset;
+        box-sizing: border-box;
+        display: block;
+        width: 100%;
+        padding: .6rem 0;
+        font: inherit;
+        font-size: var(--fs);
+        line-height: 1.3;
+        color: inherit;
+        cursor: pointer
+    }
 
-      .footer-main {
-        padding: 55px 0 60px;
-      }
+    .index button::after {
+        content: " +";
+        opacity: .5
+    }
 
-      .footer-main h2 {
-        margin-bottom: 35px;
-      }
+    .open button::after {
+        content: " –"
+    }
 
-      .footer-bottom {
-        flex-direction: column;
-        gap: 10px;
-      }
+    .index button:focus-visible {
+        outline: 1px solid var(--cobalt);
+        outline-offset: 2px
+    }
 
-      .footer-top {
-        align-items: flex-start;
-      }
+    .panel {
+        display: grid;
+        grid-template-rows: 0fr;
+        transition: grid-template-rows .45s ease
+    }
+
+    .panel > div {
+        overflow: hidden
+    }
+
+    .panel p {
+        margin: 0;
+        padding: 0 0 1.2rem;
+        font-size: clamp(1.1rem, 2.4vw, 1.3rem);
+        line-height: 1.6;
+        max-width: 34rem
+    }
+
+    .open .panel {
+        grid-template-rows: 1fr
+    }
+
+    .tbd {
+        opacity: .55
+    }
+
+    footer {
+        padding: 2rem 1rem 3rem;
+        text-align: center;
+        font: 300 .8rem var(--f-title);
+        letter-spacing: .3em;
+        text-transform: uppercase;
+        color: var(--cobalt)
+    }/* Light-source cursor */
+    #fx {
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 99
     }
 
     @media (prefers-reduced-motion: reduce) {
-      html {
-        scroll-behavior: auto;
-      }
-
-      *,
-      *::before,
-      *::after {
-        transition-duration: 0.01ms !important;
-        animation-duration: 0.01ms !important;
-      }
-  
-    }
-  </style>
-</head>
-<body id="top">
-  <header class="container">
-    <div class="topbar">
-      <a href="#" class="wordmark">OVERAND INSTITUTE<br>FOR RECOVERY TECHNOLOGIES</a>
-      <nav class="nav" aria-label="Main navigation">
-        <a href="#about">About</a>
-        <a href="#programme">Programme</a>
-        <a href="#research">Research</a>
-        <a href="#participate" class="nav-cta">Participate ↗</a>
-      </nav>
-    </div>
-  </header>
-
-  <main>
-    <section class="container hero">
-      <p class="eyebrow">A Ukraine-rooted institute · Est. 2026</p>
-      <h1>Overand Institute for Recovery Technologies</h1>
-      <div class="hero-note">
-        <p>Overand — what comes over and after: the rapture.</p>
-        <p class="aside">Research / Culture /<br>Collective recovery</p>
-      </div>
-      <div class="hero-panel">
-        <p class="eyebrow">01 — The question</p>
-        <h2>Technology is turning toward the psyche.</h2>
-        <p>Ukraine can lead the new field of recovery technologies.</p>
-      </div>
-    </section>
-
-    <section class="container" id="about">
-      <div class="intro-grid">
-        <div class="section-label">
-          <span>01 / CONTEXT</span>
-          <span>Why Overand</span>
-        </div>
-        <div class="intro-content">
-          <h2>An entire society living through change.</h2>
-          <p>
-            Entering its fifth year of full-scale war, Ukraine's army
-            includes hundreds of thousands of civilians who, only a few
-            years ago, were designers, artists, lawyers, engineers, or
-            office workers. As they cycle in and out of military
-            rotations, society as a whole is undergoing profound change.
-          </p>
-          <p>
-            Ukraine has become a global center for defense innovation,
-            yet only a small share of that innovation focuses on how
-            people survive and recover from hyper-mediated warfare.
-            Mental health and social recovery tools remain generic.
-            We see this asymmetry as a critical tech-justice problem.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <section class="container" id="research">
-      <div class="research-block">
-        <p class="eyebrow">02 — An emerging field</p>
-        <h2>
-          Technology is turning<br>
-          toward the psyche.
-        </h2>
-        <p class="research-lead">
-          Ukraine can lead the new field of recovery technologies.
-        </p>
-        <div class="research-copy">
-          <p>
-            The technology industry everywhere is turning toward the
-            psyche: attention, sleep, stress and mood are now design
-            problems, increasingly addressed through biometric wearables,
-            spatial and binaural audio, VR exposure environments,
-            neurofeedback, and conversational AI positioned as a first
-            line of psychological support.
-          </p>
-          <p>
-            Nearly all of this is calibrated for peacetime cognition,
-            with little research on how contemporary war affects the
-            mind. Decades after Harun Farocki documented video games
-            being used to treat PTSD, post-war recovery demands a new
-            body of work.
-          </p>
-          <p>
-            Ukraine can become a leader in this emerging field,
-            creating open-source knowledge that can be adapted elsewhere.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <section class="container" id="mission">
-      <div class="section-label">
-        <span>03 / THE INSTITUTE</span>
-        <span>Who we are</span>
-      </div>
-      <div class="mission-content">
-        <h2>What is Overand Institute?</h2>
-        <p>
-          A Ukraine-rooted nonprofit in formation, founded by professor
-          Bogna Konior and psychoanalyst Yuliia Leites, working at the
-          intersection of psychoanalysis, culture, and new recovery
-          technologies.
-        </p>
-      </div>
-    </section>
-
-    <section class="container" id="programme">
-      <div class="programme-header">
-        <div class="section-label">
-          <span>04 / FIELDWORK</span>
-          <span>Kyiv, Ukraine</span>
-        </div>
-        <h2>The Kyiv music programme<br>+ psychotherapy</h2>
-        <p class="programme-intro">
-          Sound is not only something we experience.
-          It can become something we shape, understand,
-          and use to recover a sense of agency.
-        </p>
-      </div>
-
-      <div class="programme-grid">
-        <article class="programme-item">
-          <span class="eyebrow">01 — The problem</span>
-          <h3>Sonic warfare</h3>
-          <p>
-            Psychiatrists at Kyiv's military hospital use
-            “dronophobia” for a new subset of shell shock:
-            scooters, fans, air conditioners, and bees can
-            reproduce the sound of a drone and trigger panic
-            in civilian life.
-          </p>
-        </article>
-
-        <article class="programme-item">
-          <span class="eyebrow">02 — The method</span>
-          <h3>Sound as recovery technology</h3>
-          <p>
-            Across 32 music-composition lessons interlaced
-            with collective psychotherapy, workshops, and
-            listening labs, participants transform feared
-            sounds into material they can shape, compose,
-            and perform.
-          </p>
-          <p>
-            The shift is from being involuntarily affected
-            by sound to becoming its author — gaining agency
-            over material that resists ordinary speech.
-          </p>
-        </article>
-
-        <article class="programme-item programme-feature">
-          <span class="eyebrow">03 — The gathering</span>
-          <h3>A protected graduation rave</h3>
-          <p>
-            The programme culminates in a protected
-            graduation rave, where soldiers share creative
-            work and wartime experiences with civilians.
-          </p>
-        </article>
-      </div>
-    </section>
-
-    <section class="container" id="stages">
-      <div class="stages-heading">
-        <p class="eyebrow">05 / FROM PILOT TO INFRASTRUCTURE</p>
-        <h2>Three stages<br>of the pilot.</h2>
-      </div>
-
-      <div class="stage-row">
-        <div class="stage-number">01</div>
-        <div class="stage-name">
-          <p class="eyebrow">Stage one</p>
-          <h3>Test the model</h3>
-        </div>
-        <div class="stage-description">
-          <p>
-            Rebuild the course as a hybrid national resource
-            for 50+ participants; establish evaluation and
-            safeguarding; map Ukrainian recovery technologies.
-          </p>
-        </div>
-      </div>
-
-      <div class="stage-row">
-        <div class="stage-number">02</div>
-        <div class="stage-name">
-          <p class="eyebrow">Stage two</p>
-          <h3>Build a school</h3>
-        </div>
-        <div class="stage-description">
-          <p>
-            Expand to 500+ participants and multiple tracks;
-            train facilitators; formalize veteran-care ties;
-            launch international R&D with Stella Matutina
-            and NYU.
-          </p>
-        </div>
-      </div>
-
-      <div class="stage-row">
-        <div class="stage-number">03</div>
-        <div class="stage-name">
-          <p class="eyebrow">Stage three</p>
-          <h3>Transfer</h3>
-        </div>
-        <div class="stage-description">
-          <p>
-            Embed the curriculum in universities and
-            rehabilitation centres; support regional delivery
-            and a national festival; transition to Ukrainian
-            local leadership.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <section class="container" id="recovery">
-      <div class="recovery-header">
-        <p class="eyebrow">06 / A WORKING DEFINITION</p>
-        <h2>What are recovery<br>technologies?</h2>
-      </div>
-
-      <div class="definition-row">
-        <span class="definition-number">01</span>
-        <p>
-          A method, tool or protocol for cognitive health,
-          collective agency and a return to public life —
-          not only a clinical treatment.
-        </p>
-      </div>
-
-      <div class="definition-row">
-        <span class="definition-number">02</span>
-        <p>
-          Built with those who use it: veterans, soldiers,
-          civilians, clinicians, engineers and artists
-          in one room.
-        </p>
-      </div>
-
-      <div class="definition-row">
-        <span class="definition-number">03</span>
-        <p>
-          Tested in real settings, not laboratories —
-          studios, clubs, clinics and homes.
-        </p>
-      </div>
-
-      <div class="definition-row">
-        <span class="definition-number">04</span>
-        <p>
-          Documented and open-source, so knowledge produced
-          in Ukraine can travel, change and be used elsewhere.
-        </p>
-      </div>
-
-      <p class="recovery-note">
-        Sound is the first field of practice. Further research
-        extends this model into spatial audio, AR/VR, biosensors,
-        neurofeedback, and AI-assisted therapeutic tools grounded
-        in clinical and lived reality.
-      </p>
-    </section>
-
-    <section class="container" id="partners">
-      <div class="partners-heading">
-        <p class="eyebrow">07 / COLLABORATION</p>
-        <h2>Strategic partner<br>ecosystem.</h2>
-      </div>
-
-      <div class="partner-row">
-        <div class="partner-category">Local infrastructure</div>
-        <div class="partner-description">
-          Module Exchange (pedagogy), Kyrylivska club k41
-          (showcases), and Dim Zvuku Lviv.
-        </div>
-      </div>
-
-      <div class="partner-row">
-        <div class="partner-category">Clinical &amp; tech R&amp;D</div>
-        <div class="partner-description">
-          Ukrainian biometrics (Airest), psychotherapeutic
-          evaluation frameworks, and spatial audio labs.
-        </div>
-      </div>
-
-      <div class="partner-row">
-        <div class="partner-category">Global R&amp;D labs</div>
-        <div class="partner-description">
-          Stella Matutina R&amp;D School in Lucerne,
-          Switzerland, for frontier tools including AR/VR
-          and biosensors.
-        </div>
-      </div>
-
-      <div class="partner-row">
-        <div class="partner-category">Academic engines</div>
-        <div class="partner-description">
-          NYU for research, student exchange, and clinical
-          psychology evaluation.
-        </div>
-      </div>
-    </section>
-
-    <section class="container" id="participate">
-      <div class="participate-header">
-        <p class="eyebrow">08 / GET INVOLVED</p>
-        <h2>Recovery is a<br>collective project.</h2>
-        <p>
-          Help build the research, tools and networks that
-          make recovery possible beyond one course or city.
-        </p>
-      </div>
-
-      <div class="participate-grid">
-        <article class="participate-card">
-          <span class="eyebrow">01</span>
-          <h3>Funders</h3>
-          <p>
-            Co-fund national pilot scaling alongside existing
-            anchor supporters.
-          </p>
-        </article>
-
-        <article class="participate-card">
-          <span class="eyebrow">02</span>
-          <h3>Artists &amp; venues</h3>
-          <p>
-            Offer mentorship, host listening labs, and include
-            veteran artists on international lineups.
-          </p>
-        </article>
-
-        <article class="participate-card">
-          <span class="eyebrow">03</span>
-          <h3>Universities</h3>
-          <p>
-            Co-develop evaluation methodologies, host
-            placements, and publish bilingual research.
-          </p>
-        </article>
-
-        <article class="participate-card">
-          <span class="eyebrow">04</span>
-          <h3>Clinicians &amp; technologists</h3>
-          <p>
-            Join safeguarding boards or build frontier
-            recovery tools using VR, biosensors, and AI.
-          </p>
-        </article>
-      </div>
-    </section>
-
-    <footer class="site-footer">
-      <div class="container">
-        <div class="footer-top">
-          <p class="eyebrow">OVERAND INSTITUTE FOR<br>RECOVERY TECHNOLOGIES</p>
-          <a href="#top" class="back-to-top">Back to top ↑</a>
-        </div>
-
-        <div class="footer-main">
-          <h2>What comes over<br>and after.</h2>
-          <p>
-            The Overand Institute for Recovery Technologies is a
-            nonprofit in formation, founded by professor Bogna Konior
-            and psychotherapist Yuliia Leites.
-          </p>
-          <p>
-            Working at the intersection of emerging technologies
-            and psychotherapy, we study how technologically
-            accelerated modern warfare affects the human psyche.
-            We develop open-source tools and homecoming protocols
-            that support cognitive health and collective agency.
-          </p>
-        </div>
-
-        <div class="footer-bottom">
-          <span>Ukraine-rooted. Open to the world.</span>
-          <span>Research / Culture / Recovery</span>
-        </div>
-      </div>
-    </footer>
-  </main>
-
-  <script>
-    document.querySelectorAll('a[href^="#"]').forEach(link => {
-      link.addEventListener('click', event => {
-        const target = document.querySelector(link.getAttribute('href'));
-        if (target) {
-          event.preventDefault();
-          target.scrollIntoView({ behavior: 'smooth' });
+        .panel {
+            transition:none
         }
-      });
+
+        html {
+            scroll-behavior: auto
+        }
+    }
+    </style>
+</head>
+<body>
+    <canvas id="fx" aria-hidden="true">
+    </canvas>
+
+    <header class="hero">
+        <div class="hero-image empty" role="img" aria-label="Hero image placeholder"></div>
+        <a class="title-box" href="#index">
+            Overand
+            <small>enter the index</small>
+        </a>
+    </header>
+
+    <main id="index-wrap">
+        <p class="root-label" id="index">overand</p>
+        <ul class="tree index">
+            <li>
+                <div class="item">
+                    <button aria-expanded="false">What is Overand Institute?</button>
+                    <div class="panel">
+                        <div>
+                            <p>A Ukraine-rooted nonprofit in formation, founded by professor Bogna Konior and psychoanalyst Yuliia Leites, working at the intersection of psychoanalysis, culture, and new recovery technologies.</p>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="item group">The pilot</div>
+                <ul class="tree">
+                    <li>
+                        <div class="item">
+                            <button aria-expanded="false">Stage 1 — Test the model</button>
+                            <div class="panel">
+                                <div>
+                                    <p>Rebuild the course as a hybrid national resource for 50+ participants; establish evaluation and safeguarding; map Ukrainian recovery technologies.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="item">
+                            <button aria-expanded="false">Stage 2 — Build a school</button>
+                            <div class="panel">
+                                <div>
+                                    <p>Expand to 500+ participants and multiple tracks; train facilitators; formalise veteran-care ties; launch international R&amp;D with Stella Matutina and NYU.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="item">
+                            <button aria-expanded="false">Stage 3 — Transfer</button>
+                            <div class="panel">
+                                <div>
+                                    <p>Embed the curriculum in universities and rehabilitation centres; support regional delivery and a national festival; transition to Ukrainian local leadership.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <div class="item">
+                    <button aria-expanded="false">Founders</button>
+                    <div class="panel">
+                        <div>
+                            <p>
+                                Professor Bogna Konior and psychoanalyst Yuliia Leites. 
+                                <span class="tbd">[Biographies to come.]</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="item">
+                    <button aria-expanded="false">Psychoanalysis and Culture</button>
+                    <div class="panel">
+                        <div>
+                            <p class="tbd">[Text to come.]</p>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="item">
+                    <button aria-expanded="false">Recovery Technologies</button>
+                    <div class="panel">
+                        <div>
+                            <p class="tbd">[Text to come.]</p>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="item">
+                    <button aria-expanded="false">Safeguarding and Evaluation</button>
+                    <div class="panel">
+                        <div>
+                            <p class="tbd">[Text to come.]</p>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="item">
+                    <button aria-expanded="false">Partners</button>
+                    <div class="panel">
+                        <div>
+                            <p class="tbd">[Text to come.]</p>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="item">
+                    <button aria-expanded="false">Contact</button>
+                    <div class="panel">
+                        <div>
+                            <p class="tbd">[Text to come.]</p>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </main>
+    <footer>Overand Institute</footer>
+
+    <script>
+    document.querySelectorAll('.index button').forEach(function(b) {
+        b.addEventListener('click', function() {
+            var it = b.parentElement,
+                open = it.classList.toggle('open');
+            b.setAttribute('aria-expanded', open);
+        });
     });
-  </script>
+
+    (function() {
+        if (!matchMedia('(pointer:fine)').matches)
+            return;
+        var calm = matchMedia('(prefers-reduced-motion:reduce)').matches;
+        document.documentElement.classList.add('light-cursor');
+        var c = document.getElementById('fx'),
+            g = c.getContext('2d'),
+            dpr = Math.min(devicePixelRatio || 1, 2);
+        var pts = [],
+            mx = -100,
+            my = -100,
+            seen = false,
+            LIFE = 650;
+        function size() {
+            c.width = innerWidth * dpr;
+            c.height = innerHeight * dpr;
+            g.setTransform(dpr, 0, 0, dpr, 0, 0)
+        }
+        size();
+        addEventListener('resize', size);
+        addEventListener('pointermove', function(e) {
+            mx = e.clientX;
+            my = e.clientY;
+            seen = true;
+            if (!calm)
+                pts.push({
+                    x: mx,
+                    y: my,
+                    t: performance.now()
+                });
+        });
+        document.addEventListener('mouseleave', function() {
+            seen = false
+        });
+        document.addEventListener('mouseenter', function() {
+            seen = true
+        });
+        function frame(now) {
+            g.clearRect(0, 0, innerWidth, innerHeight);
+            while (pts.length && now - pts[0].t > LIFE)
+                pts.shift();
+            for (var i = 0; i < pts.length; i++) {
+                var a = 1 - (now - pts[i].t) / LIFE;
+                g.beginPath();
+                g.arc(pts[i].x, pts[i].y, 1 + 3 * a, 0, 6.283);
+                g.fillStyle = 'rgba(0,71,171,' + (0.5 * a * a) + ')';
+                g.fill();
+            }
+            if (seen) {
+                var h = g.createRadialGradient(mx, my, 0, mx, my, 52);
+                h.addColorStop(0, 'rgba(0,71,171,.35)');
+                h.addColorStop(.35, 'rgba(0,71,171,.12)');
+                h.addColorStop(1, 'rgba(0,71,171,0)');
+                g.fillStyle = h;
+                g.beginPath();
+                g.arc(mx, my, 52, 0, 6.283);
+                g.fill();
+                g.beginPath();
+                g.arc(mx, my, 4, 0, 6.283);
+                g.fillStyle = '#fffdf5';
+                g.fill();
+                g.lineWidth = 1;
+                g.strokeStyle = '#0047ab';
+                g.stroke();
+            }
+            requestAnimationFrame(frame);
+        }
+        requestAnimationFrame(frame);
+    })();
+    </script>
 </body>
 </html>
