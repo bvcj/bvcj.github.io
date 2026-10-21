@@ -269,7 +269,7 @@
 
     <header class="hero">
         <div class="hero-image empty" role="img" aria-label="Hero image placeholder"></div>
-        <a class="title-box" href="#index">
+        <a class="title-box" href="#index" id="enter-index">
             Overand
             <small>enter the index</small>
         </a>
@@ -399,6 +399,38 @@
         });
     });
 
+// Slow, smooth transition into the index
+document.getElementById('enter-index').addEventListener('click', function(e) {
+    e.preventDefault();
+
+    var target = document.getElementById('index-wrap');
+    var start = window.scrollY;
+    var end = target.getBoundingClientRect().top + window.scrollY;
+    var distance = end - start;
+    var duration = 1800; // milliseconds
+    var startTime = null;
+
+    function animateScroll(now) {
+        if (!startTime) startTime = now;
+
+        var progress = Math.min((now - startTime) / duration, 1);
+
+        // Smooth ease-in-out
+        var eased = progress < 0.5
+            ? 4 * progress * progress * progress
+            : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+
+        window.scrollTo(0, start + distance * eased);
+
+        if (progress < 1) {
+            requestAnimationFrame(animateScroll);
+        } else {
+            history.replaceState(null, '', '#index');
+        }
+    }
+
+    requestAnimationFrame(animateScroll);
+});
     (function() {
         if (!matchMedia('(pointer:fine)').matches)
             return;
