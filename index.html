@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -77,6 +76,7 @@ html.light-cursor * {
   background: var(--paper);
 }
 
+/* The video keeps playing (it feeds the point cloud) but is not drawn. */
 #source-video {
   position: absolute;
   inset: 0;
@@ -84,7 +84,8 @@ html.light-cursor * {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: .28;
+  opacity: 0;
+  pointer-events: none;
 }
 
 #pointcloud {
@@ -94,17 +95,6 @@ html.light-cursor * {
   width: 100%;
   height: 100%;
   pointer-events: none;
-}
-
-.hero-image.empty::after {
-  content: "image";
-  position: absolute;
-  left: 2rem;
-  bottom: 1.2rem;
-  font: 300 .9rem var(--f-title);
-  letter-spacing: .3em;
-  text-transform: uppercase;
-  color: var(--cobalt);
 }
 
 /* TITLE */
@@ -122,6 +112,8 @@ html.light-cursor * {
   text-align: center;
   font: 300 clamp(2.6rem, 9vw, 6rem)/1 var(--f-title);
   letter-spacing: .04em;
+  /* Soft paper halo keeps the logo readable over a strong cloud. */
+  box-shadow: 0 0 4.5rem 2rem rgba(244,241,232,.92);
   transition: background .4s, color .4s;
 }
 
@@ -291,10 +283,6 @@ footer {
     justify-items: center;
   }
 
-  #source-video {
-    opacity: .35;
-  }
-
   .title-box {
     max-width: 100%;
   }
@@ -325,7 +313,10 @@ footer {
       muted
       loop
       playsinline
+      webkit-playsinline
       preload="auto"
+      disablepictureinpicture
+      disableremoteplayback
     ></video>
     <canvas id="pointcloud"></canvas>
   </div>
@@ -449,29 +440,57 @@ footer {
 import * as THREE from
   "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js";
 
-const hero = document.querySelector(".hero");
-const video = document.querySelector("#source-video");
+/* ------------------------------------------------------------------
+   TUNING — change these to adjust the look
+------------------------------------------------------------------- */
+const GRID_W   = 320;    // particles across (more = finer, heavier)
+const GRID_H   = 180;    // particles down
+const DEPTH    = 1.4;    // how far brightness pushes points in z (3D relief)
+const INVERT   = false;  // false: dark areas of the video = dense dots
+                         // true:  bright areas of the video = dense dots
+const SWAY     = 0.14;   // slow automatic orbit, in radians
+const REPEL    = 0.22;   // how far the pointer pushes points away
+
+const hero   = document.querySelector(".hero");
+const video  = document.querySelector("#source-video");
 const canvas = document.querySelector("#pointcloud");
 
 if (hero && video && canvas) {
+
+  /* ---------------- Autoplay: start immediately, no click ---------------- */
+
   video.muted = true;
+  video.defaultMuted = true;
   video.loop = true;
   video.playsInline = true;
+  video.setAttribute("muted", "");
 
   function tryPlay() {
-    video.play().catch(() => {
-      console.warn("Overand: video playback was blocked.");
-    });
+    if (!video.paused) return;
+    const attempt = video.play();
+    if (attempt && attempt.catch) attempt.catch(() => {});
   }
 
-  video.addEventListener("loadeddata", tryPlay);
-  video.addEventListener("canplay", tryPlay);
+  ["loadedmetadata", "loadeddata", "canplay"].forEach(type =>
+    video.addEventListener(type, tryPlay)
+  );
+  window.addEventListener("pageshow", tryPlay);
   tryPlay();
+
+  // Some browsers (iOS Low Power Mode, strict settings) block autoplay
+  // until any interaction. The first one of these starts the video silently.
+  ["pointerdown", "touchstart", "keydown", "wheel", "scroll", "click"]
+    .forEach(type =>
+      window.addEventListener(type, tryPlay, { once: true, passive: true })
+    );
+
+  /* ---------------- Point cloud ---------------- */
 
   try {
     const scene = new THREE.Scene();
 
-    const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
+    const FOV = 45;
+    const camera = new THREE.PerspectiveCamera(FOV, 1, 0.1, 100);
     camera.position.z = 5;
 
     const renderer = new THREE.WebGLRenderer({
@@ -481,47 +500,32 @@ if (hero && video && canvas) {
       powerPreference: "high-performance"
     });
 
-    renderer.setPixelRatio(
-      Math.min(window.devicePixelRatio || 1, 1.5)
-    );
+    const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+    renderer.setPixelRatio(pixelRatio);
     renderer.setClearColor(0x000000, 0);
 
-    // Particle grid density. Increase for finer detail.
-    const W = 220;
-    const H = 140;
-    const count = W * H;
-
+    const count = GRID_W * GRID_H;
     const positions = new Float32Array(count * 3);
     const seeds = new Float32Array(count);
 
-    for (let y = 0; y < H; y++) {
-      for (let x = 0; x < W; x++) {
-        const i = y * W + x;
+    for (let y = 0; y < GRID_H; y++) {
+      for (let x = 0; x < GRID_W; x++) {
+        const i = y * GRID_W + x;
         const j = i * 3;
 
-        positions[j] = x / (W - 1) - 0.5;
-        positions[j + 1] = 0.5 - y / (H - 1);
+        positions[j]     = x / (GRID_W - 1) - 0.5;
+        positions[j + 1] = 0.5 - y / (GRID_H - 1);
         positions[j + 2] = 0;
 
-        // Stable variation for each particle.
         seeds[i] = Math.random();
       }
     }
 
     const geometry = new THREE.BufferGeometry();
-
-    geometry.setAttribute(
-      "position",
-      new THREE.BufferAttribute(positions, 3)
-    );
-
-    geometry.setAttribute(
-      "aSeed",
-      new THREE.BufferAttribute(seeds, 1)
-    );
+    geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+    geometry.setAttribute("aSeed", new THREE.BufferAttribute(seeds, 1));
 
     const texture = new THREE.VideoTexture(video);
-    texture.colorSpace = THREE.SRGBColorSpace;
     texture.minFilter = THREE.LinearFilter;
     texture.magFilter = THREE.LinearFilter;
     texture.generateMipmaps = false;
@@ -531,145 +535,154 @@ if (hero && video && canvas) {
       depthWrite: false,
 
       uniforms: {
-        uVideo: { value: texture },
-        uTime: { value: 0 },
-        uMouse: { value: new THREE.Vector2(0, 0) },
+        uVideo:      { value: texture },
+        uTime:       { value: 0 },
+        uPointer:    { value: new THREE.Vector2(0, 0) },
+        uPlane:      { value: new THREE.Vector2(4, 3) },
         uResolution: { value: new THREE.Vector2(1, 1) },
-        uVideoSize: { value: new THREE.Vector2(16, 9) },
-        uPointSize: { value: 2.0 },
-        uOpacity: { value: 0.96 }
+        uVideoSize:  { value: new THREE.Vector2(16, 9) },
+        uPointSize:  { value: 3.0 },
+        uPixelRatio: { value: pixelRatio },
+        uDepth:      { value: DEPTH },
+        uRepel:      { value: REPEL },
+        uInvert:     { value: INVERT ? 1 : 0 }
       },
 
       vertexShader: `
+        uniform sampler2D uVideo;
         uniform float uTime;
-        uniform vec2 uMouse;
-        uniform vec2 uResolution;
+        uniform vec2  uPointer;
+        uniform vec2  uPlane;
+        uniform vec2  uResolution;
+        uniform vec2  uVideoSize;
         uniform float uPointSize;
+        uniform float uPixelRatio;
+        uniform float uDepth;
+        uniform float uRepel;
+        uniform float uInvert;
 
         attribute float aSeed;
 
-        varying vec2 vUv;
-        varying float vSeed;
+        varying vec3  vColor;
+        varying float vAlpha;
 
         void main() {
-          vUv = position.xy + 0.5;
-          vSeed = aSeed;
+          // Sample the video "cover"-style so it is never stretched.
+          vec2 g = position.xy + 0.5;
+          float sa = uResolution.x / uResolution.y;
+          float va = uVideoSize.x / uVideoSize.y;
+          vec2 uv = g;
+          if (sa > va) {
+            uv.y = (g.y - 0.5) * (va / sa) + 0.5;
+          } else {
+            uv.x = (g.x - 0.5) * (sa / va) + 0.5;
+          }
 
-          float aspect = uResolution.x / uResolution.y;
+          vec3 col = texture2D(uVideo, uv).rgb;
+          float lum = dot(col, vec3(0.2126, 0.7152, 0.0722));
 
-          // Full-width particle field.
-          vec3 p = vec3(
-            position.x * 2.0 * aspect,
-            position.y * 2.0,
-            0.0
-          );
+          // "Ink" = how dense / opaque this dot should be.
+          float ink = mix(1.0 - lum, lum, uInvert);
+          ink = smoothstep(0.06, 0.92, ink);
 
-          // Gentle organic movement and pointer response.
-          float wave = sin(aSeed * 30.0 + uTime * 0.7) * 0.012;
-          float wave2 = cos(aSeed * 19.0 + uTime * 0.45) * 0.008;
+          // Lay the grid over the visible screen, then lift by brightness.
+          vec3 p = vec3(position.xy * uPlane, (lum - 0.5) * uDepth);
 
-          p.x += wave;
-          p.y += wave2;
+          // Slow, organic drift per particle.
+          p.x += sin(aSeed * 40.0 + uTime * 0.6) * 0.012;
+          p.y += cos(aSeed * 27.0 + uTime * 0.5) * 0.012;
+          p.z += sin(aSeed * 17.0 + uTime * 0.8) * 0.02;
 
-          p.x += uMouse.x * 0.10;
-          p.y += uMouse.y * 0.10;
+          // Pointer pushes nearby points away and toward the viewer.
+          vec2 d = p.xy - uPointer;
+          float f = exp(-dot(d, d) * 2.5);
+          p.xy += normalize(d + vec2(0.0001)) * f * uRepel;
+          p.z  += f * 0.35;
 
-          p.z = wave * 3.0;
+          vec4 mv = modelViewMatrix * vec4(p, 1.0);
+          gl_Position = projectionMatrix * mv;
 
-          vec4 mvPosition = modelViewMatrix * vec4(p, 1.0);
-          gl_Position = projectionMatrix * mvPosition;
+          gl_PointSize = uPointSize * uPixelRatio *
+            (0.55 + ink * 0.95) *
+            (5.0 / max(1.0, -mv.z));
 
-          gl_PointSize = uPointSize *
-            (0.75 + aSeed * 1.25) *
-            (5.0 / max(1.0, -mvPosition.z));
+          // Palette: cobalt in the light areas, deep ink-blue where dense,
+          // with a touch of the footage's own colour.
+          vec3 cobalt = vec3(0.0, 0.278, 0.671);
+          vec3 deep   = vec3(0.05, 0.05, 0.07);
+          vColor = mix(mix(cobalt, deep, ink * 0.55), col, 0.18);
+
+          vAlpha = (0.10 + 0.90 * ink) * mix(0.75, 1.0, aSeed);
         }
       `,
 
       fragmentShader: `
-        uniform sampler2D uVideo;
-        uniform float uOpacity;
-
-        varying vec2 vUv;
-        varying float vSeed;
+        varying vec3  vColor;
+        varying float vAlpha;
 
         void main() {
-          vec2 p = gl_PointCoord - 0.5;
-          float d = length(p);
-
+          float d = length(gl_PointCoord - 0.5);
           if (d > 0.5) discard;
 
-          vec3 videoColor = texture2D(uVideo, vUv).rgb;
-
-          float brightness = dot(
-            videoColor,
-            vec3(0.2126, 0.7152, 0.0722)
-          );
-
-          vec3 cobalt = vec3(0.0, 0.278, 0.671);
-          vec3 paper = vec3(0.957, 0.945, 0.91);
-
-          // Blend footage with the site's color palette.
-          vec3 color = mix(videoColor, cobalt, 0.32);
-          color = mix(color, paper, 0.12);
-
-          float edge = 1.0 - smoothstep(0.25, 0.5, d);
-          float alpha = edge * mix(0.35, 1.0, brightness);
-
-          // Slightly vary opacity from point to point.
-          alpha *= mix(0.72, 1.0, vSeed);
-          alpha *= uOpacity;
-
-          gl_FragColor = vec4(color, alpha);
-
-          #include <tonemapping_fragment>
-          #include <colorspace_fragment>
+          float edge = 1.0 - smoothstep(0.3, 0.5, d);
+          gl_FragColor = vec4(vColor, vAlpha * edge);
         }
       `
     });
 
     const cloud = new THREE.Points(geometry, material);
+    cloud.frustumCulled = false;
     scene.add(cloud);
 
-    let mouseX = 0;
-    let mouseY = 0;
-    let targetX = 0;
-    let targetY = 0;
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+    let targetX = 0, targetY = 0;   // pointer, -1..1
+    let mouseX = 0,  mouseY = 0;    // smoothed
 
     hero.addEventListener("pointermove", event => {
       const rect = hero.getBoundingClientRect();
-
-      targetX =
-        ((event.clientX - rect.left) / rect.width - 0.5) * 2;
-
-      targetY =
-        -((event.clientY - rect.top) / rect.height - 0.5) * 2;
+      targetX =  ((event.clientX - rect.left) / rect.width  - 0.5) * 2;
+      targetY = -((event.clientY - rect.top)  / rect.height - 0.5) * 2;
     });
 
     hero.addEventListener("pointerleave", () => {
-      targetX = 0;
-      targetY = 0;
+      // Park the pointer far away so nothing is pushed.
+      targetX = 9;
+      targetY = 9;
     });
 
-    const reducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    );
+    targetX = 9;
+    targetY = 9;
 
     function resize() {
-      const width = hero.clientWidth || window.innerWidth;
+      const width  = hero.clientWidth  || window.innerWidth;
       const height = hero.clientHeight || window.innerHeight;
 
       renderer.setSize(width, height, false);
 
       camera.aspect = width / height;
-      camera.position.z = Math.max(5, 5 * width / height);
       camera.updateProjectionMatrix();
+
+      // World-space size of the screen at z = 0, with a little overscan
+      // so the edges stay filled while the cloud tilts.
+      const visibleH = 2 * camera.position.z *
+        Math.tan(THREE.MathUtils.degToRad(FOV / 2));
+
+      material.uniforms.uPlane.value.set(
+        visibleH * camera.aspect * 1.12,
+        visibleH * 1.12
+      );
 
       material.uniforms.uResolution.value.set(width, height);
 
       material.uniforms.uVideoSize.value.set(
-        video.videoWidth || 16,
+        video.videoWidth  || 16,
         video.videoHeight || 9
       );
+
+      // Dot size follows grid spacing so the picture stays continuous.
+      material.uniforms.uPointSize.value =
+        Math.max(2.2, (width / GRID_W) * 0.95);
     }
 
     window.addEventListener("resize", resize);
@@ -681,24 +694,42 @@ if (hero && video && canvas) {
 
     resize();
 
+    // Only render while the hero is on screen.
+    let heroVisible = true;
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(entries => {
+        heroVisible = entries[0].isIntersecting;
+      }).observe(hero);
+    }
+
     const clock = new THREE.Clock();
 
     function animate() {
       requestAnimationFrame(animate);
+      if (!heroVisible) return;
 
       const time = clock.getElapsedTime();
+      const still = reducedMotion.matches;
 
-      if (!reducedMotion.matches) {
-        mouseX += (targetX - mouseX) * 0.035;
-        mouseY += (targetY - mouseY) * 0.035;
+      if (!still) {
+        mouseX += (targetX - mouseX) * 0.08;
+        mouseY += (targetY - mouseY) * 0.08;
 
-        cloud.rotation.y = mouseX * 0.035;
-        cloud.rotation.x = mouseY * 0.025;
+        const plane = material.uniforms.uPlane.value;
+        material.uniforms.uPointer.value.set(
+          mouseX * plane.x * 0.5 / 1.12,
+          mouseY * plane.y * 0.5 / 1.12
+        );
+
+        const px = Math.max(-1, Math.min(1, mouseX));
+        const py = Math.max(-1, Math.min(1, mouseY));
+
+        cloud.rotation.y = Math.sin(time * 0.18) * SWAY + px * 0.06;
+        cloud.rotation.x = Math.cos(time * 0.14) * SWAY * 0.5 + py * 0.04;
 
         material.uniforms.uTime.value = time;
-        material.uniforms.uMouse.value.set(mouseX, mouseY);
       } else {
-        material.uniforms.uMouse.value.set(0, 0);
+        material.uniforms.uPointer.value.set(99, 99);
       }
 
       renderer.render(scene, camera);
@@ -715,7 +746,7 @@ if (hero && video && canvas) {
 
   } catch (error) {
     console.error("Overand point-cloud error:", error);
-    // The video remains visible beneath the canvas.
+    // If WebGL fails, show the plain video instead.
     video.style.opacity = "1";
   }
 }
