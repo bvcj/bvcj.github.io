@@ -1,722 +1,881 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <title>Overand Institute</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300&family=Pirata+One&display=swap" rel="stylesheet">
-    <style>
-    /* ---- Your fonts: drop the files in /fonts and they take over automatically.
-       Until then, Cormorant Garamond Light and Pirata One stand in. ---- */
-    @font-face {
-        font-family: "FlorDeRuina Semilla";
-        font-display: swap;
-        src: url("fonts/FlorDeRuina-Semilla.otf") format("opentype")
-    }
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Overand Institute</title>
 
-    @font-face {
-        font-family: "Hershey Noailles OldFrench Regular";
-        font-display: swap;
-        src: url("fonts/Hershey-Noailles-OldFrench-Regular.otf") format("opentype")
-    }
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300&family=Pirata+One&display=swap" rel="stylesheet">
 
-    :root {
-        --paper: #f4f1e8;
-        --ink: #0d0d0d;
-        --cobalt: #0047ab;
-        --line: rgba(0, 71, 171, .28);
-        --tl: rgba(0, 71, 171, .55);
-        --f-title: "FlorDeRuina Semilla", "Cormorant Garamond", Georgia, serif;
-        --f-index: "Hershey Noailles OldFrench Regular", "Pirata One", Georgia, serif;
-        --hero-image: none;
-        /* e.g. url("data:image/jpeg;base64,...") or url("hero.jpg") */
-        color-scheme: light;
-        box-sizing: border-box;
-        padding-top: env(safe-area-inset-top, 0px);
-        padding-bottom: env(safe-area-inset-bottom, 0px);
-    }
+<style>
+@font-face {
+  font-family: "FlorDeRuina Semilla";
+  font-display: swap;
+  src: url("fonts/FlorDeRuina-Semilla.otf") format("opentype");
+}
 
-    html {
-        scroll-behavior: smooth;
-        scroll-padding-top: env(safe-area-inset-top, 0px)
-    }
+@font-face {
+  font-family: "Hershey Noailles OldFrench Regular";
+  font-display: swap;
+  src: url("fonts/Hershey-Noailles-OldFrench-Regular.otf") format("opentype");
+}
 
-    body {
-        margin: 0;
-        background: var(--paper);
-        color: var(--ink)
-    }
+:root {
+  --paper: #f4f1e8;
+  --ink: #0d0d0d;
+  --cobalt: #0047ab;
+  --line: rgba(0,71,171,.28);
+  --tl: rgba(0,71,171,.55);
+  --f-title: "FlorDeRuina Semilla", "Cormorant Garamond", Georgia, serif;
+  --f-index: "Hershey Noailles OldFrench Regular", "Pirata One", Georgia, serif;
+  color-scheme: light;
+}
 
-    html.light-cursor, html.light-cursor * {
-        cursor: none !important
-    }/* Hero */
-    .hero {
-        position: relative;
-        min-height: 100vh;
-        min-height: 100svh;
-        display: grid;
-        align-items: center;
-        justify-items: end;
-        padding: 0 clamp(1.2rem, 8vw, 7rem);
-        box-sizing: border-box;
-        overflow: hidden
-    }
+* {
+  box-sizing: border-box;
+}
 
-    .hero-image {
-        position: absolute;
-        inset: 0;
-        background: var(--hero-image) center/cover no-repeat
-    }
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 1rem;
+}
 
-    .hero-image.empty {
-        background:
-        repeating-linear-gradient(135deg, transparent 0 22px, var(--line) 22px 23px), var(--paper)
-    }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+}
 
-    .hero-image.empty::after {
-        content: "image";
-        position: absolute;
-        left: clamp(1rem, 3vw, 2rem);
-        bottom: 1.2rem;
-        font: 300 .9rem var(--f-title);
-        letter-spacing: .3em;
-        text-transform: uppercase;
-        color: var(--cobalt)
+html.light-cursor,
+html.light-cursor * {
+  cursor: none !important;
+}
 
-        .hero-image {
-    position: absolute;
-    inset: 0;
-    overflow: hidden;
-    background: var(--paper);
+/* HERO */
+
+.hero {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: grid;
+  align-items: center;
+  justify-items: end;
+  padding: 0 clamp(1.2rem, 8vw, 7rem);
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--paper);
+}
+
+.hero-image {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  background: var(--paper);
 }
 
 #source-video {
-    display: none;
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: .28;
 }
 
 #pointcloud {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    display: block;
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
 }
-    }
 
-   .title-box {
-    position: relative;
-    z-index: 1;
-    display: block;
-    text-decoration: none;
-    color: var(--cobalt);
-    background: var(--paper);
-    border: 1px solid var(--cobalt);
-    padding: 1.2rem clamp(1.6rem, 5vw, 4rem) 1.4rem;
-    font: 300 clamp(2.6rem, 9vw, 6rem) / 1 var(--f-title);
-    letter-spacing: .04em;
-    text-align: center;
-    transition: background .4s, color .4s;
+.hero-image.empty::after {
+  content: "image";
+  position: absolute;
+  left: 2rem;
+  bottom: 1.2rem;
+  font: 300 .9rem var(--f-title);
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: var(--cobalt);
 }
+
+/* TITLE */
 
 .title-box {
-    text-transform: uppercase;
+  position: relative;
+  z-index: 2;
+  display: block;
+  padding: 1.2rem clamp(1.6rem, 5vw, 4rem) 1.4rem;
+  border: 1px solid var(--cobalt);
+  background: var(--paper);
+  color: var(--cobalt);
+  text-decoration: none;
+  text-transform: uppercase;
+  text-align: center;
+  font: 300 clamp(2.6rem, 9vw, 6rem)/1 var(--f-title);
+  letter-spacing: .04em;
+  transition: background .4s, color .4s;
 }
 
 .title-box small {
-    display: block;
-    margin-top: .7rem;
-    font-size: .22em;
-    letter-spacing: .35em;
-    text-transform: lowercase;
+  display: block;
+  margin-top: .7rem;
+  font-size: .22em;
+  letter-spacing: .35em;
+  text-transform: lowercase;
 }
-    .title-box:hover, .title-box:focus-visible {
-        background: var(--cobalt);
-        color: var(--paper);
-        outline: none
-    }/* Index as a tree outline */
-    main {
-        max-width: 48rem;
-        margin: 0 auto;
-        padding: 5rem clamp(1.2rem, 5vw, 2rem) 6rem;
-        font-family: var(--f-index)
-    }
 
-    .tree {
-        --fs: clamp(1.2rem, 3.4vw, 1.7rem);
-        list-style: none;
-        margin: 0;
-        padding: 0
-    }
+.title-box:hover,
+.title-box:focus-visible {
+  background: var(--cobalt);
+  color: var(--paper);
+  outline: none;
+}
 
-    .root-label {
-        font-size: var(--fs);
-        line-height: 1.3;
-        margin: 0 0 .1rem;
-        color: var(--cobalt)
-    }
+/* INDEX */
 
-    .index {
-        padding-left: .5rem
-    }
+main {
+  max-width: 48rem;
+  margin: 0 auto;
+  padding: 5rem clamp(1.2rem, 5vw, 2rem) 6rem;
+  font-family: var(--f-index);
+}
 
-    .tree li {
-        position: relative;
-        padding-left: 1.8rem
-    }
+.tree {
+  --fs: clamp(1.2rem, 3.4vw, 1.7rem);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
 
-    .tree li::before {
-        content: "";
-        position: absolute;
-        left: 0;
-        top: 0;
-        bottom: 0;
-        border-left: 1px solid var(--tl)
-    }
+.root-label {
+  margin: 0 0 .1rem;
+  color: var(--cobalt);
+  font-size: var(--fs);
+  line-height: 1.3;
+}
 
-    .tree li::after {
-        content: "";
-        position: absolute;
-        left: 0;
-        top: calc(.6rem + var(--fs) * .65);
-        width: 1.3rem;
-        border-top: 1px solid var(--tl)
-    }
+.index {
+  padding-left: .5rem;
+}
 
-    .tree li:last-child::before {
-        bottom: auto;
-        height: calc(.6rem + var(--fs) * .65)
-    }
+.tree li {
+  position: relative;
+  padding-left: 1.8rem;
+}
 
-    .item {
-        color: var(--ink);
-        transition: color .35s
-    }
+.tree li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  border-left: 1px solid var(--tl);
+}
 
-    .item:hover, .item:focus-within {
-        color: var(--cobalt)
-    }
+.tree li::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: calc(.6rem + var(--fs) * .65);
+  width: 1.3rem;
+  border-top: 1px solid var(--tl);
+}
 
-    .group {
-        padding: .6rem 0;
-        font-size: var(--fs);
-        line-height: 1.3
-    }
+.tree li:last-child::before {
+  bottom: auto;
+  height: calc(.6rem + var(--fs) * .65);
+}
 
-    .index button {
-        all: unset;
-        box-sizing: border-box;
-        display: block;
-        width: 100%;
-        padding: .6rem 0;
-        font: inherit;
-        font-size: var(--fs);
-        line-height: 1.3;
-        color: inherit;
-        cursor: pointer
-    }
+.item {
+  color: var(--ink);
+  transition: color .35s;
+}
 
-    .index button::after {
-        content: " +";
-        opacity: .5
-    }
+.item:hover,
+.item:focus-within {
+  color: var(--cobalt);
+}
 
-    .open button::after {
-        content: " –"
-    }
+.group {
+  padding: .6rem 0;
+  font-size: var(--fs);
+  line-height: 1.3;
+}
 
-    .index button:focus-visible {
-        outline: 1px solid var(--cobalt);
-        outline-offset: 2px
-    }
+.index button {
+  all: unset;
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  padding: .6rem 0;
+  font: inherit;
+  font-size: var(--fs);
+  line-height: 1.3;
+  color: inherit;
+  cursor: pointer;
+}
 
-    .panel {
-        display: grid;
-        grid-template-rows: 0fr;
-        transition: grid-template-rows .45s ease
-    }
+.index button::after {
+  content: " +";
+  opacity: .5;
+}
 
-    .panel > div {
-        overflow: hidden
-    }
+.index .open > button::after {
+  content: " −";
+}
 
-    .panel p {
-        margin: 0;
-        padding: 0 0 1.2rem;
-        font-size: clamp(1.1rem, 2.4vw, 1.3rem);
-        line-height: 1.6;
-        max-width: 34rem
-    }
+.index button:focus-visible {
+  outline: 1px solid var(--cobalt);
+  outline-offset: 2px;
+}
 
-    .open .panel {
-        grid-template-rows: 1fr
-    }
+.panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows .45s ease;
+}
 
-    .tbd {
-        opacity: .55
-    }
+.panel > div {
+  overflow: hidden;
+}
 
-    footer {
-        padding: 2rem 1rem 3rem;
-        text-align: center;
-        font: 300 .8rem var(--f-title);
-        letter-spacing: .3em;
-        text-transform: uppercase;
-        color: var(--cobalt)
-    }/* Light-source cursor */
-    #fx {
-        position: fixed;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-        pointer-events: none;
-        z-index: 99
-    }
+.panel p {
+  max-width: 34rem;
+  margin: 0;
+  padding: 0 0 1.2rem;
+  font-size: clamp(1.1rem, 2.4vw, 1.3rem);
+  line-height: 1.6;
+}
 
-    @media (prefers-reduced-motion: reduce) {
-        .panel {
-            transition:none
-        }
+.open .panel {
+  grid-template-rows: 1fr;
+}
 
-        html {
-            scroll-behavior: auto
-        }
-    }
-    </style>
+.tbd {
+  opacity: .55;
+}
+
+/* FOOTER */
+
+footer {
+  padding: 2rem 1rem 3rem;
+  color: var(--cobalt);
+  text-align: center;
+  font: 300 .8rem var(--f-title);
+  letter-spacing: .3em;
+  text-transform: uppercase;
+}
+
+/* LIGHT-SOURCE CURSOR */
+
+#fx {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 99;
+}
+
+@media (max-width: 600px) {
+  .hero {
+    justify-items: center;
+  }
+
+  #source-video {
+    opacity: .35;
+  }
+
+  .title-box {
+    max-width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .panel {
+    transition: none;
+  }
+}
+</style>
 </head>
 
-    
+<body>
+
+<canvas id="fx" aria-hidden="true"></canvas>
+
+<header class="hero">
+  <div class="hero-image" aria-hidden="true">
+    <video
+      id="source-video"
+      src="./plant_trial.mp4"
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="auto"
+    ></video>
+    <canvas id="pointcloud"></canvas>
+  </div>
+
+  <a class="title-box" href="#index" id="enter-index">
+    OVERAND
+    <small>ENTER THE INDEX</small>
+  </a>
+</header>
+
+<main id="index-wrap">
+  <p class="root-label" id="index">Overand</p>
+
+  <ul class="tree index">
+
+    <li>
+      <div class="item">
+        <button aria-expanded="false" type="button">
+          What is Overand Institute?
+        </button>
+        <div class="panel"><div>
+          <p>A Ukraine-rooted initiative at the intersection of post-war resocialization and emerging technologies, proposing a psychotherapy and electronic music pilot that grows into a national programme, prototyping new knowledge and applications for open-source recovery protocols.</p>
+        </div></div>
+      </div>
+    </li>
+
+    <li>
+      <div class="item group">The pilot</div>
+      <ul class="tree">
+
+        <li>
+          <div class="item">
+            <button aria-expanded="false" type="button">Stage 1 — Test the model</button>
+            <div class="panel"><div>
+              <p>Rebuild the course as a hybrid national resource for 50+ participants; establish evaluation and safeguarding; map Ukrainian recovery technologies.</p>
+            </div></div>
+          </div>
+        </li>
+
+        <li>
+          <div class="item">
+            <button aria-expanded="false" type="button">Stage 2 — Build a school</button>
+            <div class="panel"><div>
+              <p>Expand to 500+ participants and multiple tracks; train facilitators; formalise veteran-care ties; launch international R&amp;D with Stella Matutina and NYU.</p>
+            </div></div>
+          </div>
+        </li>
+
+        <li>
+          <div class="item">
+            <button aria-expanded="false" type="button">Stage 3 — Transfer</button>
+            <div class="panel"><div>
+              <p>Embed the curriculum in universities and rehabilitation centres; support regional delivery and a national festival; transition to Ukrainian local leadership.</p>
+            </div></div>
+          </div>
+        </li>
+
+      </ul>
+    </li>
+
+    <li>
+      <div class="item">
+        <button aria-expanded="false" type="button">Founders</button>
+        <div class="panel"><div>
+          <p>Professor Bogna Konior and psychoanalyst Yuliia Leites. <span class="tbd">[Biographies to come.]</span></p>
+        </div></div>
+      </div>
+    </li>
+
+    <li>
+      <div class="item">
+        <button aria-expanded="false" type="button">What are recovery Technologies?</button>
+        <div class="panel"><div>
+          <p class="tbd">A method, a tool or protocol for cognitive health, collective agency and a return to public life — not only a clinical treatment.</p>
+        </div></div>
+      </div>
+    </li>
+
+    <li>
+      <div class="item">
+        <button aria-expanded="false" type="button">Recovery Technologies</button>
+        <div class="panel"><div>
+          <p class="tbd">[Text to come.]</p>
+        </div></div>
+      </div>
+    </li>
+
+    <li>
+      <div class="item">
+        <button aria-expanded="false" type="button">Safeguarding and Evaluation</button>
+        <div class="panel"><div>
+          <p class="tbd">[Text to come.]</p>
+        </div></div>
+      </div>
+    </li>
+
+    <li>
+      <div class="item">
+        <button aria-expanded="false" type="button">Partners</button>
+        <div class="panel"><div>
+          <p class="tbd">[Text to come.]</p>
+        </div></div>
+      </div>
+    </li>
+
+    <li>
+      <div class="item">
+        <button aria-expanded="false" type="button">Contact</button>
+        <div class="panel"><div>
+          <p class="tbd">[Text to come.]</p>
+        </div></div>
+      </div>
+    </li>
+
+  </ul>
+</main>
+
+<footer>Overand Institute</footer>
+
 <script type="module">
 import * as THREE from
   "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js";
 
-const video = document.getElementById("source-video");
-const canvas = document.getElementById("pointcloud");
 const hero = document.querySelector(".hero");
+const video = document.querySelector("#source-video");
+const canvas = document.querySelector("#pointcloud");
 
-const scene = new THREE.Scene();
+if (hero && video && canvas) {
+  video.muted = true;
+  video.loop = true;
+  video.playsInline = true;
 
-const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
-camera.position.z = 5;
-
-const renderer = new THREE.WebGLRenderer({
-  canvas,
-  alpha: true,
-  antialias: true
-});
-
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-renderer.setClearColor(0x000000, 0);
-
-// Lower resolution = better performance
-const W = 180;
-const H = 110;
-const count = W * H;
-
-const sample = document.createElement("canvas");
-sample.width = W;
-sample.height = H;
-
-const ctx = sample.getContext("2d", {
-  willReadFrequently: true
-});
-
-const positions = new Float32Array(count * 3);
-const colors = new Float32Array(count * 3);
-const original = new Float32Array(count * 3);
-
-for (let y = 0; y < H; y++) {
-  for (let x = 0; x < W; x++) {
-    const i = y * W + x;
-    const j = i * 3;
-
-    const px = (x / (W - 1) - 0.5) * 5.8;
-    const py = (0.5 - y / (H - 1)) * 3.5;
-
-    positions[j] = px;
-    positions[j + 1] = py;
-    positions[j + 2] = 0;
-
-    original[j] = px;
-    original[j + 1] = py;
-    original[j + 2] = 0;
-  }
-}
-
-const geometry = new THREE.BufferGeometry();
-
-geometry.setAttribute(
-  "position",
-  new THREE.BufferAttribute(positions, 3)
-);
-
-geometry.setAttribute(
-  "color",
-  new THREE.BufferAttribute(colors, 3)
-);
-
-const material = new THREE.PointsMaterial({
-  size: 0.018,
-  vertexColors: true,
-  transparent: true,
-  opacity: 0.9,
-  sizeAttenuation: true,
-  depthWrite: false,
-  blending: THREE.NormalBlending
-});
-
-const cloud = new THREE.Points(geometry, material);
-scene.add(cloud);
-
-const cobalt = new THREE.Color("#0047ab");
-const paper = new THREE.Color("#f4f1e8");
-const temp = new THREE.Color();
-
-let mouseX = 0;
-let mouseY = 0;
-let ready = false;
-
-video.addEventListener("loadeddata", () => {
-  ready = true;
-  video.play().catch(() => {});
-});
-
-function resize() {
-  const width = hero.clientWidth;
-  const height = hero.clientHeight;
-
-  renderer.setSize(width, height, false);
-
-  camera.aspect = width / height;
-  camera.position.z = Math.max(5, 5 * width / height);
-  camera.updateProjectionMatrix();
-}
-
-window.addEventListener("resize", resize);
-resize();
-
-hero.addEventListener("pointermove", e => {
-  const rect = hero.getBoundingClientRect();
-
-  mouseX = ((e.clientX - rect.left) / rect.width - 0.5) * 0.15;
-  mouseY = ((e.clientY - rect.top) / rect.height - 0.5) * 0.15;
-});
-
-hero.addEventListener("pointerleave", () => {
-  mouseX = 0;
-  mouseY = 0;
-});
-
-const reducedMotion = window.matchMedia(
-  "(prefers-reduced-motion: reduce)"
-).matches;
-
-function animate(now) {
-  requestAnimationFrame(animate);
-
-  if (ready && video.readyState >= 2) {
-    ctx.drawImage(video, 0, 0, W, H);
-
-    let pixels;
-
-    try {
-      pixels = ctx.getImageData(0, 0, W, H).data;
-    } catch (error) {
-      return;
-    }
-
-    const pos = geometry.attributes.position.array;
-    const col = geometry.attributes.color.array;
-    const time = now * 0.001;
-
-    for (let i = 0; i < count; i++) {
-      const j = i * 3;
-      const p = i * 4;
-
-      const r = pixels[p] / 255;
-      const g = pixels[p + 1] / 255;
-      const b = pixels[p + 2] / 255;
-
-      const brightness = 0.2126 * r + 0.7152 * g + 0.0722 * b;
-
-      // Video colour blended with Overand's cobalt and paper tones
-      temp.setRGB(r, g, b);
-      temp.lerp(cobalt, 0.25);
-      temp.lerp(paper, 0.12);
-
-      col[j] = temp.r;
-      col[j + 1] = temp.g;
-      col[j + 2] = temp.b;
-
-      // Fake depth from image brightness, plus organic motion
-      const wave = reducedMotion
-        ? 0
-        : Math.sin(i * 0.09 + time * 1.2) * 0.025;
-
-      pos[j] = original[j] + mouseX * brightness;
-      pos[j + 1] = original[j + 1] - mouseY * brightness;
-      pos[j + 2] = (brightness - 0.5) * 0.75 + wave;
-    }
-
-    geometry.attributes.position.needsUpdate = true;
-    geometry.attributes.color.needsUpdate = true;
+  function tryPlay() {
+    video.play().catch(() => {
+      console.warn("Overand: video playback was blocked.");
+    });
   }
 
-  cloud.rotation.y +=
-    ((reducedMotion ? 0 : mouseX * 0.2) - cloud.rotation.y) * 0.025;
+  video.addEventListener("loadeddata", tryPlay);
+  video.addEventListener("canplay", tryPlay);
+  tryPlay();
 
-  cloud.rotation.x +=
-    ((reducedMotion ? 0 : -mouseY * 0.2) - cloud.rotation.x) * 0.025;
+  try {
+    const scene = new THREE.Scene();
 
-  renderer.render(scene, camera);
-}
+    const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
+    camera.position.z = 5;
 
-requestAnimationFrame(animate);
-</script>
-
-<body>
-    <canvas id="fx" aria-hidden="true">
-    </canvas>
-
-    <header class="hero">
-       <div class="hero-image" aria-hidden="true">
-    <video id="source-video"
-           src="./plant_trial.mp4"
-           autoplay muted loop playsinline></video>
-    <canvas id="pointcloud"></canvas>
-</div>
-        <a class="title-box" href="#index" id="enter-index">
-            OVERAND
-            <small>ENTER THE INDEX</small>
-        </a>
-    </header>
-
-    <main id="index-wrap">
-        <p class="root-label" id="index">Overand</p>
-        <ul class="tree index">
-            <li>
-                <div class="item">
-                    <button aria-expanded="false">What is Overand Institute?</button>
-                    <div class="panel">
-                        <div>
-                            <p>A Ukraine-rooted initiative at the intersection of post-war resocialization and emerging technologies, proposing a psychotherapy and electronic music pilot that grows into a national programme, prototyping new knowledge and applications for open-source recovery protocols.</p>
-                        </div>
-                    </div>
-                </div>
-            </li>
-            <li>
-                <div class="item group">The pilot</div>
-                <ul class="tree">
-                    <li>
-                        <div class="item">
-                            <button aria-expanded="false">Stage 1 — Test the model</button>
-                            <div class="panel">
-                                <div>
-                                    <p>Rebuild the course as a hybrid national resource for 50+ participants; establish evaluation and safeguarding; map Ukrainian recovery technologies.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="item">
-                            <button aria-expanded="false">Stage 2 — Build a school</button>
-                            <div class="panel">
-                                <div>
-                                    <p>Expand to 500+ participants and multiple tracks; train facilitators; formalise veteran-care ties; launch international R&amp;D with Stella Matutina and NYU.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="item">
-                            <button aria-expanded="false">Stage 3 — Transfer</button>
-                            <div class="panel">
-                                <div>
-                                    <p>Embed the curriculum in universities and rehabilitation centres; support regional delivery and a national festival; transition to Ukrainian local leadership.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <div class="item">
-                    <button aria-expanded="false">Founders</button>
-                    <div class="panel">
-                        <div>
-                            <p>
-                                Professor Bogna Konior and psychoanalyst Yuliia Leites. 
-                                <span class="tbd">[Biographies to come.]</span>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </li>
-            <li>
-                <div class="item">
-                    <button aria-expanded="false">What are recovery Technologies?</button>
-                    <div class="panel">
-                        <div>
-                            <p class="tbd">A method, a tool or protocol for cognitive health, collective agency and a return to public life - not only a clinical treatment </p>
-                        </div>
-                    </div>
-                </div>
-            </li>
-            <li>
-                <div class="item">
-                    <button aria-expanded="false">Recovery Technologies</button>
-                    <div class="panel">
-                        <div>
-                            <p class="tbd">[Text to come.]</p>
-                        </div>
-                    </div>
-                </div>
-            </li>
-            <li>
-                <div class="item">
-                    <button aria-expanded="false">Safeguarding and Evaluation</button>
-                    <div class="panel">
-                        <div>
-                            <p class="tbd">[Text to come.]</p>
-                        </div>
-                    </div>
-                </div>
-            </li>
-            <li>
-                <div class="item">
-                    <button aria-expanded="false">Partners</button>
-                    <div class="panel">
-                        <div>
-                            <p class="tbd">[Text to come.]</p>
-                        </div>
-                    </div>
-                </div>
-            </li>
-            <li>
-                <div class="item">
-                    <button aria-expanded="false">Contact</button>
-                    <div class="panel">
-                        <div>
-                            <p class="tbd">[Text to come.]</p>
-                        </div>
-                    </div>
-                </div>
-            </li>
-        </ul>
-    </main>
-    <footer>Overand Institute</footer>
-
-    <script>
-    document.querySelectorAll('.index button').forEach(function(b) {
-        b.addEventListener('click', function() {
-            var it = b.parentElement,
-                open = it.classList.toggle('open');
-            b.setAttribute('aria-expanded', open);
-        });
+    const renderer = new THREE.WebGLRenderer({
+      canvas,
+      alpha: true,
+      antialias: true,
+      powerPreference: "high-performance"
     });
 
-// Slow, smooth transition into the index
-document.getElementById('enter-index').addEventListener('click', function(e) {
-    e.preventDefault();
+    renderer.setPixelRatio(
+      Math.min(window.devicePixelRatio || 1, 1.5)
+    );
+    renderer.setClearColor(0x000000, 0);
 
-    var target = document.getElementById('index-wrap');
-    var start = window.scrollY;
-    var end = target.getBoundingClientRect().top + window.scrollY;
-    var distance = end - start;
-    var duration = 1800; // milliseconds
-    var startTime = null;
+    // Particle grid density. Increase for finer detail.
+    const W = 220;
+    const H = 140;
+    const count = W * H;
 
-    function animateScroll(now) {
-        if (!startTime) startTime = now;
+    const positions = new Float32Array(count * 3);
+    const seeds = new Float32Array(count);
 
-        var progress = Math.min((now - startTime) / duration, 1);
+    for (let y = 0; y < H; y++) {
+      for (let x = 0; x < W; x++) {
+        const i = y * W + x;
+        const j = i * 3;
 
-        // Smooth ease-in-out
-        var eased = progress < 0.5
-            ? 4 * progress * progress * progress
-            : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+        positions[j] = x / (W - 1) - 0.5;
+        positions[j + 1] = 0.5 - y / (H - 1);
+        positions[j + 2] = 0;
 
-        window.scrollTo(0, start + distance * eased);
-
-        if (progress < 1) {
-            requestAnimationFrame(animateScroll);
-        } else {
-            history.replaceState(null, '', '#index');
-        }
+        // Stable variation for each particle.
+        seeds[i] = Math.random();
+      }
     }
 
-    requestAnimationFrame(animateScroll);
+    const geometry = new THREE.BufferGeometry();
+
+    geometry.setAttribute(
+      "position",
+      new THREE.BufferAttribute(positions, 3)
+    );
+
+    geometry.setAttribute(
+      "aSeed",
+      new THREE.BufferAttribute(seeds, 1)
+    );
+
+    const texture = new THREE.VideoTexture(video);
+    texture.colorSpace = THREE.SRGBColorSpace;
+    texture.minFilter = THREE.LinearFilter;
+    texture.magFilter = THREE.LinearFilter;
+    texture.generateMipmaps = false;
+
+    const material = new THREE.ShaderMaterial({
+      transparent: true,
+      depthWrite: false,
+
+      uniforms: {
+        uVideo: { value: texture },
+        uTime: { value: 0 },
+        uMouse: { value: new THREE.Vector2(0, 0) },
+        uResolution: { value: new THREE.Vector2(1, 1) },
+        uVideoSize: { value: new THREE.Vector2(16, 9) },
+        uPointSize: { value: 2.0 },
+        uOpacity: { value: 0.96 }
+      },
+
+      vertexShader: `
+        uniform float uTime;
+        uniform vec2 uMouse;
+        uniform vec2 uResolution;
+        uniform float uPointSize;
+
+        attribute float aSeed;
+
+        varying vec2 vUv;
+        varying float vSeed;
+
+        void main() {
+          vUv = position.xy + 0.5;
+          vSeed = aSeed;
+
+          float aspect = uResolution.x / uResolution.y;
+
+          // Full-width particle field.
+          vec3 p = vec3(
+            position.x * 2.0 * aspect,
+            position.y * 2.0,
+            0.0
+          );
+
+          // Gentle organic movement and pointer response.
+          float wave = sin(aSeed * 30.0 + uTime * 0.7) * 0.012;
+          float wave2 = cos(aSeed * 19.0 + uTime * 0.45) * 0.008;
+
+          p.x += wave;
+          p.y += wave2;
+
+          p.x += uMouse.x * 0.10;
+          p.y += uMouse.y * 0.10;
+
+          p.z = wave * 3.0;
+
+          vec4 mvPosition = modelViewMatrix * vec4(p, 1.0);
+          gl_Position = projectionMatrix * mvPosition;
+
+          gl_PointSize = uPointSize *
+            (0.75 + aSeed * 1.25) *
+            (5.0 / max(1.0, -mvPosition.z));
+        }
+      `,
+
+      fragmentShader: `
+        uniform sampler2D uVideo;
+        uniform float uOpacity;
+
+        varying vec2 vUv;
+        varying float vSeed;
+
+        void main() {
+          vec2 p = gl_PointCoord - 0.5;
+          float d = length(p);
+
+          if (d > 0.5) discard;
+
+          vec3 videoColor = texture2D(uVideo, vUv).rgb;
+
+          float brightness = dot(
+            videoColor,
+            vec3(0.2126, 0.7152, 0.0722)
+          );
+
+          vec3 cobalt = vec3(0.0, 0.278, 0.671);
+          vec3 paper = vec3(0.957, 0.945, 0.91);
+
+          // Blend footage with the site's color palette.
+          vec3 color = mix(videoColor, cobalt, 0.32);
+          color = mix(color, paper, 0.12);
+
+          float edge = 1.0 - smoothstep(0.25, 0.5, d);
+          float alpha = edge * mix(0.35, 1.0, brightness);
+
+          // Slightly vary opacity from point to point.
+          alpha *= mix(0.72, 1.0, vSeed);
+          alpha *= uOpacity;
+
+          gl_FragColor = vec4(color, alpha);
+
+          #include <tonemapping_fragment>
+          #include <colorspace_fragment>
+        }
+      `
+    });
+
+    const cloud = new THREE.Points(geometry, material);
+    scene.add(cloud);
+
+    let mouseX = 0;
+    let mouseY = 0;
+    let targetX = 0;
+    let targetY = 0;
+
+    hero.addEventListener("pointermove", event => {
+      const rect = hero.getBoundingClientRect();
+
+      targetX =
+        ((event.clientX - rect.left) / rect.width - 0.5) * 2;
+
+      targetY =
+        -((event.clientY - rect.top) / rect.height - 0.5) * 2;
+    });
+
+    hero.addEventListener("pointerleave", () => {
+      targetX = 0;
+      targetY = 0;
+    });
+
+    const reducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    );
+
+    function resize() {
+      const width = hero.clientWidth || window.innerWidth;
+      const height = hero.clientHeight || window.innerHeight;
+
+      renderer.setSize(width, height, false);
+
+      camera.aspect = width / height;
+      camera.position.z = Math.max(5, 5 * width / height);
+      camera.updateProjectionMatrix();
+
+      material.uniforms.uResolution.value.set(width, height);
+
+      material.uniforms.uVideoSize.value.set(
+        video.videoWidth || 16,
+        video.videoHeight || 9
+      );
+    }
+
+    window.addEventListener("resize", resize);
+    video.addEventListener("loadedmetadata", resize);
+
+    if ("ResizeObserver" in window) {
+      new ResizeObserver(resize).observe(hero);
+    }
+
+    resize();
+
+    const clock = new THREE.Clock();
+
+    function animate() {
+      requestAnimationFrame(animate);
+
+      const time = clock.getElapsedTime();
+
+      if (!reducedMotion.matches) {
+        mouseX += (targetX - mouseX) * 0.035;
+        mouseY += (targetY - mouseY) * 0.035;
+
+        cloud.rotation.y = mouseX * 0.035;
+        cloud.rotation.x = mouseY * 0.025;
+
+        material.uniforms.uTime.value = time;
+        material.uniforms.uMouse.value.set(mouseX, mouseY);
+      } else {
+        material.uniforms.uMouse.value.set(0, 0);
+      }
+
+      renderer.render(scene, camera);
+    }
+
+    animate();
+
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden) {
+        tryPlay();
+        resize();
+      }
+    });
+
+  } catch (error) {
+    console.error("Overand point-cloud error:", error);
+    // The video remains visible beneath the canvas.
+    video.style.opacity = "1";
+  }
+}
+</script>
+
+<script>
+// Expand and collapse index sections.
+document.querySelectorAll(".index button").forEach(button => {
+  button.addEventListener("click", () => {
+    const item = button.parentElement;
+    const isOpen = item.classList.toggle("open");
+
+    button.setAttribute("aria-expanded", String(isOpen));
+  });
 });
-    (function() {
-        if (!matchMedia('(pointer:fine)').matches)
-            return;
-        var calm = matchMedia('(prefers-reduced-motion:reduce)').matches;
-        document.documentElement.classList.add('light-cursor');
-        var c = document.getElementById('fx'),
-            g = c.getContext('2d'),
-            dpr = Math.min(devicePixelRatio || 1, 2);
-        var pts = [],
-            mx = -100,
-            my = -100,
-            seen = false,
-            LIFE = 650;
-        function size() {
-            c.width = innerWidth * dpr;
-            c.height = innerHeight * dpr;
-            g.setTransform(dpr, 0, 0, dpr, 0, 0)
-        }
-        size();
-        addEventListener('resize', size);
-        addEventListener('pointermove', function(e) {
-            mx = e.clientX;
-            my = e.clientY;
-            seen = true;
-            if (!calm)
-                pts.push({
-                    x: mx,
-                    y: my,
-                    t: performance.now()
-                });
-        });
-        document.addEventListener('mouseleave', function() {
-            seen = false
-        });
-        document.addEventListener('mouseenter', function() {
-            seen = true
-        });
-        function frame(now) {
-            g.clearRect(0, 0, innerWidth, innerHeight);
-            while (pts.length && now - pts[0].t > LIFE)
-                pts.shift();
-            for (var i = 0; i < pts.length; i++) {
-                var a = 1 - (now - pts[i].t) / LIFE;
-                g.beginPath();
-                g.arc(pts[i].x, pts[i].y, 1 + 3 * a, 0, 6.283);
-                g.fillStyle = 'rgba(0,71,171,' + (0.5 * a * a) + ')';
-                g.fill();
-            }
-            if (seen) {
-                var h = g.createRadialGradient(mx, my, 0, mx, my, 52);
-                h.addColorStop(0, 'rgba(0,71,171,.35)');
-                h.addColorStop(.35, 'rgba(0,71,171,.12)');
-                h.addColorStop(1, 'rgba(0,71,171,0)');
-                g.fillStyle = h;
-                g.beginPath();
-                g.arc(mx, my, 52, 0, 6.283);
-                g.fill();
-                g.beginPath();
-                g.arc(mx, my, 4, 0, 6.283);
-                g.fillStyle = '#fffdf5';
-                g.fill();
-                g.lineWidth = 1;
-                g.strokeStyle = '#0047ab';
-                g.stroke();
-            }
-            requestAnimationFrame(frame);
-        }
-        requestAnimationFrame(frame);
-    })();
-    </script>
+
+// Slow, smooth transition from the hero into the index.
+const enterLink = document.getElementById("enter-index");
+
+enterLink.addEventListener("click", event => {
+  event.preventDefault();
+
+  const target = document.getElementById("index-wrap");
+  const start = window.scrollY;
+  const end = target.getBoundingClientRect().top + window.scrollY;
+  const distance = end - start;
+  const duration = 1800;
+  let startTime = null;
+
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    target.scrollIntoView();
+    history.replaceState(null, "", "#index");
+    return;
+  }
+
+  function scrollAnimation(now) {
+    if (startTime === null) startTime = now;
+
+    const progress = Math.min((now - startTime) / duration, 1);
+
+    const eased = progress < 0.5
+      ? 4 * progress * progress * progress
+      : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+
+    window.scrollTo(0, start + distance * eased);
+
+    if (progress < 1) {
+      requestAnimationFrame(scrollAnimation);
+    } else {
+      history.replaceState(null, "", "#index");
+    }
+  }
+
+  requestAnimationFrame(scrollAnimation);
+});
+
+// Blue light-source cursor for devices with a precise pointer.
+(function () {
+  if (!matchMedia("(pointer: fine)").matches) return;
+
+  const reducedMotion = matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
+
+  const canvas = document.getElementById("fx");
+  const ctx = canvas.getContext("2d");
+
+  if (!ctx) return;
+
+  document.documentElement.classList.add("light-cursor");
+
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+  let points = [];
+  let mouseX = -100;
+  let mouseY = -100;
+  let seen = false;
+
+  const LIFE = 650;
+
+  function resize() {
+    canvas.width = window.innerWidth * dpr;
+    canvas.height = window.innerHeight * dpr;
+
+    canvas.style.width = window.innerWidth + "px";
+    canvas.style.height = window.innerHeight + "px";
+
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  resize();
+  window.addEventListener("resize", resize);
+
+  window.addEventListener("pointermove", event => {
+    mouseX = event.clientX;
+    mouseY = event.clientY;
+    seen = true;
+
+    if (!reducedMotion) {
+      points.push({
+        x: mouseX,
+        y: mouseY,
+        t: performance.now()
+      });
+    }
+  });
+
+  document.addEventListener("mouseleave", () => {
+    seen = false;
+  });
+
+  document.addEventListener("mouseenter", () => {
+    seen = true;
+  });
+
+  function draw(now) {
+    ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+
+    points = points.filter(point => now - point.t < LIFE);
+
+    for (const point of points) {
+      const alpha = 1 - (now - point.t) / LIFE;
+
+      ctx.beginPath();
+      ctx.arc(point.x, point.y, 1 + 3 * alpha, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(0,71,171,${0.5 * alpha * alpha})`;
+      ctx.fill();
+    }
+
+    if (seen) {
+      const glow = ctx.createRadialGradient(
+        mouseX, mouseY, 0,
+        mouseX, mouseY, 52
+      );
+
+      glow.addColorStop(0, "rgba(0,71,171,.35)");
+      glow.addColorStop(.35, "rgba(0,71,171,.12)");
+      glow.addColorStop(1, "rgba(0,71,171,0)");
+
+      ctx.fillStyle = glow;
+      ctx.beginPath();
+      ctx.arc(mouseX, mouseY, 52, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.arc(mouseX, mouseY, 4, 0, Math.PI * 2);
+      ctx.fillStyle = "#fffdf5";
+      ctx.fill();
+
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = "#0047ab";
+      ctx.stroke();
+    }
+
+    requestAnimationFrame(draw);
+  }
+
+  requestAnimationFrame(draw);
+})();
+</script>
+
 </body>
 </html>
