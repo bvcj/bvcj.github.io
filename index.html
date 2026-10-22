@@ -84,6 +84,25 @@
         letter-spacing: .3em;
         text-transform: uppercase;
         color: var(--cobalt)
+
+        .hero-image {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    background: var(--paper);
+}
+
+#source-video {
+    display: none;
+}
+
+#pointcloud {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+}
     }
 
    .title-box {
@@ -266,12 +285,207 @@
     }
     </style>
 </head>
+
+    
+<script type="module">
+import * as THREE from
+  "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js";
+
+const video = document.getElementById("source-video");
+const canvas = document.getElementById("pointcloud");
+const hero = document.querySelector(".hero");
+
+const scene = new THREE.Scene();
+
+const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
+camera.position.z = 5;
+
+const renderer = new THREE.WebGLRenderer({
+  canvas,
+  alpha: true,
+  antialias: true
+});
+
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setClearColor(0x000000, 0);
+
+// Lower resolution = better performance
+const W = 180;
+const H = 110;
+const count = W * H;
+
+const sample = document.createElement("canvas");
+sample.width = W;
+sample.height = H;
+
+const ctx = sample.getContext("2d", {
+  willReadFrequently: true
+});
+
+const positions = new Float32Array(count * 3);
+const colors = new Float32Array(count * 3);
+const original = new Float32Array(count * 3);
+
+for (let y = 0; y < H; y++) {
+  for (let x = 0; x < W; x++) {
+    const i = y * W + x;
+    const j = i * 3;
+
+    const px = (x / (W - 1) - 0.5) * 5.8;
+    const py = (0.5 - y / (H - 1)) * 3.5;
+
+    positions[j] = px;
+    positions[j + 1] = py;
+    positions[j + 2] = 0;
+
+    original[j] = px;
+    original[j + 1] = py;
+    original[j + 2] = 0;
+  }
+}
+
+const geometry = new THREE.BufferGeometry();
+
+geometry.setAttribute(
+  "position",
+  new THREE.BufferAttribute(positions, 3)
+);
+
+geometry.setAttribute(
+  "color",
+  new THREE.BufferAttribute(colors, 3)
+);
+
+const material = new THREE.PointsMaterial({
+  size: 0.018,
+  vertexColors: true,
+  transparent: true,
+  opacity: 0.9,
+  sizeAttenuation: true,
+  depthWrite: false,
+  blending: THREE.NormalBlending
+});
+
+const cloud = new THREE.Points(geometry, material);
+scene.add(cloud);
+
+const cobalt = new THREE.Color("#0047ab");
+const paper = new THREE.Color("#f4f1e8");
+const temp = new THREE.Color();
+
+let mouseX = 0;
+let mouseY = 0;
+let ready = false;
+
+video.addEventListener("loadeddata", () => {
+  ready = true;
+  video.play().catch(() => {});
+});
+
+function resize() {
+  const width = hero.clientWidth;
+  const height = hero.clientHeight;
+
+  renderer.setSize(width, height, false);
+
+  camera.aspect = width / height;
+  camera.position.z = Math.max(5, 5 * width / height);
+  camera.updateProjectionMatrix();
+}
+
+window.addEventListener("resize", resize);
+resize();
+
+hero.addEventListener("pointermove", e => {
+  const rect = hero.getBoundingClientRect();
+
+  mouseX = ((e.clientX - rect.left) / rect.width - 0.5) * 0.15;
+  mouseY = ((e.clientY - rect.top) / rect.height - 0.5) * 0.15;
+});
+
+hero.addEventListener("pointerleave", () => {
+  mouseX = 0;
+  mouseY = 0;
+});
+
+const reducedMotion = window.matchMedia(
+  "(prefers-reduced-motion: reduce)"
+).matches;
+
+function animate(now) {
+  requestAnimationFrame(animate);
+
+  if (ready && video.readyState >= 2) {
+    ctx.drawImage(video, 0, 0, W, H);
+
+    let pixels;
+
+    try {
+      pixels = ctx.getImageData(0, 0, W, H).data;
+    } catch (error) {
+      return;
+    }
+
+    const pos = geometry.attributes.position.array;
+    const col = geometry.attributes.color.array;
+    const time = now * 0.001;
+
+    for (let i = 0; i < count; i++) {
+      const j = i * 3;
+      const p = i * 4;
+
+      const r = pixels[p] / 255;
+      const g = pixels[p + 1] / 255;
+      const b = pixels[p + 2] / 255;
+
+      const brightness = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+
+      // Video colour blended with Overand's cobalt and paper tones
+      temp.setRGB(r, g, b);
+      temp.lerp(cobalt, 0.25);
+      temp.lerp(paper, 0.12);
+
+      col[j] = temp.r;
+      col[j + 1] = temp.g;
+      col[j + 2] = temp.b;
+
+      // Fake depth from image brightness, plus organic motion
+      const wave = reducedMotion
+        ? 0
+        : Math.sin(i * 0.09 + time * 1.2) * 0.025;
+
+      pos[j] = original[j] + mouseX * brightness;
+      pos[j + 1] = original[j + 1] - mouseY * brightness;
+      pos[j + 2] = (brightness - 0.5) * 0.75 + wave;
+    }
+
+    geometry.attributes.position.needsUpdate = true;
+    geometry.attributes.color.needsUpdate = true;
+  }
+
+  cloud.rotation.y +=
+    ((reducedMotion ? 0 : mouseX * 0.2) - cloud.rotation.y) * 0.025;
+
+  cloud.rotation.x +=
+    ((reducedMotion ? 0 : -mouseY * 0.2) - cloud.rotation.x) * 0.025;
+
+  renderer.render(scene, camera);
+}
+
+requestAnimationFrame(animate);
+</script>
+
 <body>
     <canvas id="fx" aria-hidden="true">
     </canvas>
 
     <header class="hero">
-        <div class="hero-image empty" role="img" aria-label="Hero image placeholder"></div>
+       <div class="hero-image" aria-hidden="true">
+    <video id="source-video"
+           src="./your-video.mp4"
+           autoplay muted loop playsinline></video>
+    <canvas id="pointcloud"></canvas>
+</div>
         <a class="title-box" href="#index" id="enter-index">
             OVERAND
             <small>ENTER THE INDEX</small>
