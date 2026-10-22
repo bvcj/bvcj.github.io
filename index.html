@@ -327,6 +327,47 @@ footer {
   </a>
 </header>
 
+<script>
+// Start the video the moment the page loads, independent of the 3D library.
+(function () {
+  var v = document.getElementById("source-video");
+  if (!v) return;
+
+  v.muted = true;
+  v.defaultMuted = true;
+  v.setAttribute("muted", "");
+  v.playsInline = true;
+
+  function go() {
+    if (!v.paused) return;
+    var p = v.play();
+    if (p && p.catch) p.catch(function () {});
+  }
+
+  go();
+  ["loadedmetadata", "loadeddata", "canplay"].forEach(function (t) {
+    v.addEventListener(t, go);
+  });
+  window.addEventListener("pageshow", go);
+  document.addEventListener("visibilitychange", function () {
+    if (!document.hidden) go();
+  });
+
+  // Browsers that block autoplay (e.g. iOS Low Power Mode) start it on the
+  // first touch, scroll or key press, with no play button.
+  ["pointerdown", "touchstart", "keydown", "wheel", "scroll", "click"]
+    .forEach(function (t) {
+      window.addEventListener(t, go, { once: true, passive: true });
+    });
+
+  // If the point cloud has not appeared after 4 s (slow network, no WebGL),
+  // show the plain video so the hero is never empty.
+  setTimeout(function () {
+    if (!window.__pcReady) v.style.opacity = "1";
+  }, 4000);
+})();
+</script>
+
 <main id="index-wrap">
   <p class="root-label" id="index">Overand</p>
 
@@ -446,8 +487,6 @@ import * as THREE from
 const GRID_W   = 320;    // particles across (more = finer, heavier)
 const GRID_H   = 180;    // particles down
 const DEPTH    = 1.4;    // how far brightness pushes points in z (3D relief)
-const INVERT   = false;  // false: dark areas of the video = dense dots
-                         // true:  bright areas of the video = dense dots
 const SWAY     = 0.14;   // slow automatic orbit, in radians
 const REPEL    = 0.22;   // how far the pointer pushes points away
 
@@ -544,8 +583,7 @@ if (hero && video && canvas) {
         uPointSize:  { value: 3.0 },
         uPixelRatio: { value: pixelRatio },
         uDepth:      { value: DEPTH },
-        uRepel:      { value: REPEL },
-        uInvert:     { value: INVERT ? 1 : 0 }
+        uRepel:      { value: REPEL }
       },
 
       vertexShader: `
@@ -559,7 +597,6 @@ if (hero && video && canvas) {
         uniform float uPixelRatio;
         uniform float uDepth;
         uniform float uRepel;
-        uniform float uInvert;
 
         attribute float aSeed;
 
@@ -581,10 +618,6 @@ if (hero && video && canvas) {
           vec3 col = texture2D(uVideo, uv).rgb;
           float lum = dot(col, vec3(0.2126, 0.7152, 0.0722));
 
-          // "Ink" = how dense / opaque this dot should be.
-          float ink = mix(1.0 - lum, lum, uInvert);
-          ink = smoothstep(0.06, 0.92, ink);
-
           // Lay the grid over the visible screen, then lift by brightness.
           vec3 p = vec3(position.xy * uPlane, (lum - 0.5) * uDepth);
 
@@ -603,16 +636,12 @@ if (hero && video && canvas) {
           gl_Position = projectionMatrix * mv;
 
           gl_PointSize = uPointSize * uPixelRatio *
-            (0.55 + ink * 0.95) *
+            (0.95 + aSeed * 0.25) *
             (5.0 / max(1.0, -mv.z));
 
-          // Palette: cobalt in the light areas, deep ink-blue where dense,
-          // with a touch of the footage's own colour.
-          vec3 cobalt = vec3(0.0, 0.278, 0.671);
-          vec3 deep   = vec3(0.05, 0.05, 0.07);
-          vColor = mix(mix(cobalt, deep, ink * 0.55), col, 0.18);
-
-          vAlpha = (0.10 + 0.90 * ink) * mix(0.75, 1.0, aSeed);
+          // Original footage colours, untouched.
+          vColor = col;
+          vAlpha = mix(0.88, 1.0, aSeed);
         }
       `,
 
@@ -733,6 +762,7 @@ if (hero && video && canvas) {
       }
 
       renderer.render(scene, camera);
+      window.__pcReady = true;
     }
 
     animate();
