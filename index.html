@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Overand Institute</title>
 
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300&family=Pirata+One&display=swap" rel="stylesheet">
@@ -26,8 +27,13 @@
   --paper: #f4f1e8;
   --ink: #0d0d0d;
   --cobalt: #0047ab;
-  --line: rgba(0,71,171,.28);
-  --tl: rgba(0,71,171,.55);
+
+  /* Colour roles — the other version only changes these */
+  --lead: #0047ab;                 /* root label, footer */
+  --mark: #0047ab;                 /* + / − markers */
+  --hover: #0047ab;                /* index hover colour */
+  --tl: rgba(0,71,171,.55);        /* tree lines */
+
   --f-title: "FlorDeRuina Semilla", "Cormorant Garamond", Georgia, serif;
   --f-index: "Hershey Noailles OldFrench Regular", "Pirata One", Georgia, serif;
   color-scheme: light;
@@ -76,7 +82,8 @@ html.light-cursor * {
   background: var(--paper);
 }
 
-/* The video keeps playing (it feeds the point cloud) but is not drawn. */
+/* Visible and playing from the first moment; once the point cloud is
+   ready it fades to almost nothing (it keeps playing to feed the cloud). */
 #source-video {
   position: absolute;
   inset: 0;
@@ -84,7 +91,7 @@ html.light-cursor * {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0;
+  opacity: 1;
   pointer-events: none;
 }
 
@@ -97,24 +104,40 @@ html.light-cursor * {
   pointer-events: none;
 }
 
-/* TITLE */
+/* TITLE — no box: just a glowing wordmark */
 
 .title-box {
   position: relative;
   z-index: 2;
   display: block;
   padding: 1.2rem clamp(1.6rem, 5vw, 4rem) 1.4rem;
-  border: 1px solid var(--cobalt);
-  background: var(--paper);
   color: var(--cobalt);
   text-decoration: none;
   text-transform: uppercase;
   text-align: center;
   font: 300 clamp(2.6rem, 9vw, 6rem)/1 var(--f-title);
   letter-spacing: .04em;
-  /* Soft paper halo keeps the logo readable over a strong cloud. */
-  box-shadow: 0 0 4.5rem 2rem rgba(244,241,232,.92);
-  transition: background .4s, color .4s;
+  text-shadow:
+    0 0 .25em rgba(244,241,232,.9),
+    0 0 .6em  rgba(0,71,171,.45),
+    0 0 1.4em rgba(0,71,171,.28);
+  animation: logo-breathe 5s ease-in-out infinite;
+  transition: filter .5s ease, transform .5s ease;
+}
+
+/* Soft, edgeless paper haze behind the word so it stays readable
+   over the cloud. Lower the 62% to thin it out. */
+.title-box::before {
+  content: "";
+  position: absolute;
+  inset: -45% -35%;
+  z-index: -1;
+  background: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--paper) 62%, transparent),
+    transparent
+  );
+  pointer-events: none;
 }
 
 .title-box small {
@@ -122,27 +145,47 @@ html.light-cursor * {
   margin-top: .7rem;
   font-size: .22em;
   letter-spacing: .35em;
-  text-transform: lowercase;
+  text-transform: uppercase;
 }
 
+@keyframes logo-breathe {
+  0%, 100% {
+    text-shadow:
+      0 0 .25em rgba(244,241,232,.9),
+      0 0 .6em  rgba(0,71,171,.45),
+      0 0 1.4em rgba(0,71,171,.28);
+  }
+  50% {
+    text-shadow:
+      0 0 .3em  rgba(244,241,232,.95),
+      0 0 .8em  rgba(0,71,171,.6),
+      0 0 1.8em rgba(0,71,171,.4);
+  }
+}
+
+/* Glows more on hover / keyboard focus */
 .title-box:hover,
 .title-box:focus-visible {
-  background: var(--cobalt);
-  color: var(--paper);
   outline: none;
+  transform: scale(1.015);
+  filter:
+    drop-shadow(0 0 .12em rgba(0,71,171,.95))
+    drop-shadow(0 0 .45em rgba(0,71,171,.85))
+    drop-shadow(0 0 1.1em rgba(0,71,171,.7))
+    drop-shadow(0 0 2.2em rgba(0,71,171,.5));
 }
 
 /* INDEX */
 
 main {
-  max-width: 48rem;
-  margin: 0 auto;
-  padding: 5rem clamp(1.2rem, 5vw, 2rem) 6rem;
+  max-width: 70rem;
+  margin: 0 auto 0 clamp(.5rem, 5vw, 4.5rem);
+  padding: 5rem clamp(1.2rem, 4vw, 2rem) 6rem;
   font-family: var(--f-index);
 }
 
 .tree {
-  --fs: clamp(1.2rem, 3.4vw, 1.7rem);
+  --fs: clamp(1.5rem, 4vw, 2.3rem);
   list-style: none;
   margin: 0;
   padding: 0;
@@ -150,7 +193,7 @@ main {
 
 .root-label {
   margin: 0 0 .1rem;
-  color: var(--cobalt);
+  color: var(--lead);
   font-size: var(--fs);
   line-height: 1.3;
 }
@@ -194,7 +237,7 @@ main {
 
 .item:hover,
 .item:focus-within {
-  color: var(--cobalt);
+  color: var(--hover);
 }
 
 .group {
@@ -218,7 +261,8 @@ main {
 
 .index button::after {
   content: " +";
-  opacity: .5;
+  color: var(--mark);
+  opacity: .6;
 }
 
 .index .open > button::after {
@@ -241,26 +285,33 @@ main {
 }
 
 .panel p {
-  max-width: 34rem;
+  max-width: 52rem;
   margin: 0;
-  padding: 0 0 1.2rem;
-  font-size: clamp(1.1rem, 2.4vw, 1.3rem);
-  line-height: 1.6;
+  padding: 0 0 1.4rem;
+  font-size: clamp(1.3rem, 2.8vw, 1.7rem);
+  line-height: 1.55;
 }
 
 .open .panel {
   grid-template-rows: 1fr;
 }
 
+/* Placeholder / dimmed text — becomes full-strength hover colour on hover */
 .tbd {
   opacity: .55;
+  transition: opacity .35s;
+}
+
+.item:hover .tbd,
+.item:focus-within .tbd {
+  opacity: 1;
 }
 
 /* FOOTER */
 
 footer {
   padding: 2rem 1rem 3rem;
-  color: var(--cobalt);
+  color: var(--lead);
   text-align: center;
   font: 300 .8rem var(--f-title);
   letter-spacing: .3em;
@@ -286,6 +337,10 @@ footer {
   .title-box {
     max-width: 100%;
   }
+
+  main {
+    margin-left: 0;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -295,6 +350,10 @@ footer {
 
   .panel {
     transition: none;
+  }
+
+  .title-box {
+    animation: none;
   }
 }
 </style>
@@ -361,7 +420,7 @@ footer {
     });
 
   // If the point cloud has not appeared after 4 s (slow network, no WebGL),
-  // show the plain video so the hero is never empty.
+  // keep the plain video fully visible so the hero is never empty.
   setTimeout(function () {
     if (!window.__pcReady) v.style.opacity = "1";
   }, 4000);
@@ -516,8 +575,6 @@ if (hero && video && canvas) {
   window.addEventListener("pageshow", tryPlay);
   tryPlay();
 
-  // Some browsers (iOS Low Power Mode, strict settings) block autoplay
-  // until any interaction. The first one of these starts the video silently.
   ["pointerdown", "touchstart", "keydown", "wheel", "scroll", "click"]
     .forEach(type =>
       window.addEventListener(type, tryPlay, { once: true, passive: true })
@@ -665,8 +722,8 @@ if (hero && video && canvas) {
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
-    let targetX = 0, targetY = 0;   // pointer, -1..1
-    let mouseX = 0,  mouseY = 0;    // smoothed
+    let targetX = 9, targetY = 9;   // pointer, -1..1 (9 = parked away)
+    let mouseX = 9,  mouseY = 9;    // smoothed
 
     hero.addEventListener("pointermove", event => {
       const rect = hero.getBoundingClientRect();
@@ -675,13 +732,9 @@ if (hero && video && canvas) {
     });
 
     hero.addEventListener("pointerleave", () => {
-      // Park the pointer far away so nothing is pushed.
       targetX = 9;
       targetY = 9;
     });
-
-    targetX = 9;
-    targetY = 9;
 
     function resize() {
       const width  = hero.clientWidth  || window.innerWidth;
@@ -692,8 +745,6 @@ if (hero && video && canvas) {
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
 
-      // World-space size of the screen at z = 0, with a little overscan
-      // so the edges stay filled while the cloud tilts.
       const visibleH = 2 * camera.position.z *
         Math.tan(THREE.MathUtils.degToRad(FOV / 2));
 
@@ -709,7 +760,6 @@ if (hero && video && canvas) {
         video.videoHeight || 9
       );
 
-      // Dot size follows grid spacing so the picture stays continuous.
       material.uniforms.uPointSize.value =
         Math.max(2.2, (width / GRID_W) * 0.95);
     }
@@ -762,7 +812,14 @@ if (hero && video && canvas) {
       }
 
       renderer.render(scene, camera);
-      window.__pcReady = true;
+
+      // First cloud frame drawn: fade the plain video out underneath.
+      if (!window.__pcReady && video.readyState >= 2) {
+        window.__pcReady = true;
+        video.style.transition = "opacity .9s ease";
+        // Not fully 0: some browsers pause fully hidden videos.
+        video.style.opacity = "0.02";
+      }
     }
 
     animate();
@@ -776,7 +833,6 @@ if (hero && video && canvas) {
 
   } catch (error) {
     console.error("Overand point-cloud error:", error);
-    // If WebGL fails, show the plain video instead.
     video.style.opacity = "1";
   }
 }
