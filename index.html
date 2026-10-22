@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -27,15 +28,14 @@
   --paper: #f4f1e8;
   --ink: #0d0d0d;
   --cobalt: #0047ab;
-
-  /* Colour roles — the other version only changes these */
-  --lead: #0047ab;                 /* root label, footer */
-  --mark: #0047ab;                 /* + / − markers */
-  --hover: #0047ab;                /* index hover colour */
-  --tl: rgba(0,71,171,.55);        /* tree lines */
+  --lead: #0047ab;
+  --mark: #0047ab;
+  --hover: #0047ab;
+  --tl: rgba(0,71,171,.55);
 
   --f-title: "FlorDeRuina Semilla", "Cormorant Garamond", Georgia, serif;
   --f-index: "Hershey Noailles OldFrench Regular", "Pirata One", Georgia, serif;
+
   color-scheme: light;
 }
 
@@ -82,8 +82,6 @@ html.light-cursor * {
   background: var(--paper);
 }
 
-/* Visible and playing from the first moment; once the point cloud is
-   ready it fades to almost nothing (it keeps playing to feed the cloud). */
 #source-video {
   position: absolute;
   inset: 0;
@@ -104,7 +102,7 @@ html.light-cursor * {
   pointer-events: none;
 }
 
-/* TITLE — no box: just a glowing wordmark */
+/* TITLE */
 
 .title-box {
   position: relative;
@@ -117,27 +115,37 @@ html.light-cursor * {
   text-align: center;
   font: 300 clamp(2.6rem, 9vw, 6rem)/1 var(--f-title);
   letter-spacing: .04em;
+
   text-shadow:
-    0 0 .25em rgba(244,241,232,.9),
-    0 0 .6em  rgba(0,71,171,.45),
-    0 0 1.4em rgba(0,71,171,.28);
+    0 0 .2em rgba(244,241,232,1),
+    0 0 .5em rgba(0,71,171,.55),
+    0 0 1.2em rgba(0,71,171,.4),
+    0 0 2.5em rgba(0,71,171,.2);
+
   animation: logo-breathe 5s ease-in-out infinite;
   transition: filter .5s ease, transform .5s ease;
 }
 
-/* Soft, edgeless paper haze behind the word so it stays readable
-   over the cloud. Lower the 62% to thin it out. */
+/* SOFT, FEATHERED HALO — no rectangular edges */
+
 .title-box::before {
   content: "";
   position: absolute;
-  inset: -45% -35%;
+  inset: -100% -70%;
   z-index: -1;
-  background: radial-gradient(
-    closest-side,
-    color-mix(in srgb, var(--paper) 62%, transparent),
-    transparent
-  );
   pointer-events: none;
+
+  background: radial-gradient(
+    ellipse 50% 42% at 50% 50%,
+    rgba(244,241,232,.96) 0%,
+    rgba(244,241,232,.78) 25%,
+    rgba(244,241,232,.38) 48%,
+    rgba(244,241,232,.12) 68%,
+    transparent 100%
+  );
+
+  filter: blur(18px);
+  transform: scale(1.05);
 }
 
 .title-box small {
@@ -151,19 +159,21 @@ html.light-cursor * {
 @keyframes logo-breathe {
   0%, 100% {
     text-shadow:
-      0 0 .25em rgba(244,241,232,.9),
-      0 0 .6em  rgba(0,71,171,.45),
-      0 0 1.4em rgba(0,71,171,.28);
+      0 0 .2em rgba(244,241,232,1),
+      0 0 .5em rgba(0,71,171,.55),
+      0 0 1.2em rgba(0,71,171,.4),
+      0 0 2.5em rgba(0,71,171,.2);
   }
+
   50% {
     text-shadow:
-      0 0 .3em  rgba(244,241,232,.95),
-      0 0 .8em  rgba(0,71,171,.6),
-      0 0 1.8em rgba(0,71,171,.4);
+      0 0 .3em rgba(244,241,232,.95),
+      0 0 .8em rgba(0,71,171,.6),
+      0 0 1.8em rgba(0,71,171,.4),
+      0 0 3em rgba(0,71,171,.25);
   }
 }
 
-/* Glows more on hover / keyboard focus */
 .title-box:hover,
 .title-box:focus-visible {
   outline: none;
@@ -174,7 +184,76 @@ html.light-cursor * {
     drop-shadow(0 0 1.1em rgba(0,71,171,.7))
     drop-shadow(0 0 2.2em rgba(0,71,171,.5));
 }
+</style>
+</head>
 
+<body>
+
+<canvas id="fx" aria-hidden="true"></canvas>
+
+<header class="hero">
+  <div class="hero-image" aria-hidden="true">
+    <video
+      id="source-video"
+      src="./plant_trial.mp4"
+      autoplay
+      muted
+      loop
+      playsinline
+      webkit-playsinline
+      preload="auto"
+      disablepictureinpicture
+      disableremoteplayback
+    ></video>
+    <canvas id="pointcloud"></canvas>
+  </div>
+
+  <a class="title-box" href="#index" id="enter-index">
+    OVERAND
+    <small>ENTER THE INDEX</small>
+  </a>
+</header>
+
+<script>
+(function () {
+  var v = document.getElementById("source-video");
+  if (!v) return;
+
+  v.muted = true;
+  v.defaultMuted = true;
+  v.setAttribute("muted", "");
+  v.playsInline = true;
+
+  function go() {
+    if (!v.paused) return;
+    var p = v.play();
+    if (p && p.catch) p.catch(function () {});
+  }
+
+  go();
+
+  ["loadedmetadata", "loadeddata", "canplay"].forEach(function (t) {
+    v.addEventListener(t, go);
+  });
+
+  window.addEventListener("pageshow", go);
+
+  document.addEventListener("visibilitychange", function () {
+    if (!document.hidden) go();
+  });
+
+  ["pointerdown", "touchstart", "keydown", "wheel", "scroll", "click"]
+    .forEach(function (t) {
+      window.addEventListener(t, go, { once: true, passive: true });
+    });
+
+  setTimeout(function () {
+    if (!window.__pcReady) v.style.opacity = "1";
+  }, 4000);
+})();
+</script>
+
+<style>
 /* INDEX */
 
 main {
@@ -296,7 +375,6 @@ main {
   grid-template-rows: 1fr;
 }
 
-/* Placeholder / dimmed text — becomes full-strength hover colour on hover */
 .tbd {
   opacity: .55;
   transition: opacity .35s;
@@ -357,81 +435,11 @@ footer {
   }
 }
 </style>
-</head>
-
-<body>
-
-<canvas id="fx" aria-hidden="true"></canvas>
-
-<header class="hero">
-  <div class="hero-image" aria-hidden="true">
-    <video
-      id="source-video"
-      src="./plant_trial.mp4"
-      autoplay
-      muted
-      loop
-      playsinline
-      webkit-playsinline
-      preload="auto"
-      disablepictureinpicture
-      disableremoteplayback
-    ></video>
-    <canvas id="pointcloud"></canvas>
-  </div>
-
-  <a class="title-box" href="#index" id="enter-index">
-    OVERAND
-    <small>ENTER THE INDEX</small>
-  </a>
-</header>
-
-<script>
-// Start the video the moment the page loads, independent of the 3D library.
-(function () {
-  var v = document.getElementById("source-video");
-  if (!v) return;
-
-  v.muted = true;
-  v.defaultMuted = true;
-  v.setAttribute("muted", "");
-  v.playsInline = true;
-
-  function go() {
-    if (!v.paused) return;
-    var p = v.play();
-    if (p && p.catch) p.catch(function () {});
-  }
-
-  go();
-  ["loadedmetadata", "loadeddata", "canplay"].forEach(function (t) {
-    v.addEventListener(t, go);
-  });
-  window.addEventListener("pageshow", go);
-  document.addEventListener("visibilitychange", function () {
-    if (!document.hidden) go();
-  });
-
-  // Browsers that block autoplay (e.g. iOS Low Power Mode) start it on the
-  // first touch, scroll or key press, with no play button.
-  ["pointerdown", "touchstart", "keydown", "wheel", "scroll", "click"]
-    .forEach(function (t) {
-      window.addEventListener(t, go, { once: true, passive: true });
-    });
-
-  // If the point cloud has not appeared after 4 s (slow network, no WebGL),
-  // keep the plain video fully visible so the hero is never empty.
-  setTimeout(function () {
-    if (!window.__pcReady) v.style.opacity = "1";
-  }, 4000);
-})();
-</script>
 
 <main id="index-wrap">
   <p class="root-label" id="index">Overand</p>
 
   <ul class="tree index">
-
     <li>
       <div class="item">
         <button aria-expanded="false" type="button">
@@ -446,10 +454,11 @@ footer {
     <li>
       <div class="item group">The pilot</div>
       <ul class="tree">
-
         <li>
           <div class="item">
-            <button aria-expanded="false" type="button">Stage 1 — Test the model</button>
+            <button aria-expanded="false" type="button">
+              Stage 1 — Test the model
+            </button>
             <div class="panel"><div>
               <p>Rebuild the course as a hybrid national resource for 50+ participants; establish evaluation and safeguarding; map Ukrainian recovery technologies.</p>
             </div></div>
@@ -458,7 +467,9 @@ footer {
 
         <li>
           <div class="item">
-            <button aria-expanded="false" type="button">Stage 2 — Build a school</button>
+            <button aria-expanded="false" type="button">
+              Stage 2 — Build a school
+            </button>
             <div class="panel"><div>
               <p>Expand to 500+ participants and multiple tracks; train facilitators; formalise veteran-care ties; launch international R&amp;D with Stella Matutina and NYU.</p>
             </div></div>
@@ -467,13 +478,14 @@ footer {
 
         <li>
           <div class="item">
-            <button aria-expanded="false" type="button">Stage 3 — Transfer</button>
+            <button aria-expanded="false" type="button">
+              Stage 3 — Transfer
+            </button>
             <div class="panel"><div>
               <p>Embed the curriculum in universities and rehabilitation centres; support regional delivery and a national festival; transition to Ukrainian local leadership.</p>
             </div></div>
           </div>
         </li>
-
       </ul>
     </li>
 
@@ -488,7 +500,9 @@ footer {
 
     <li>
       <div class="item">
-        <button aria-expanded="false" type="button">What are recovery Technologies?</button>
+        <button aria-expanded="false" type="button">
+          What are recovery Technologies?
+        </button>
         <div class="panel"><div>
           <p class="tbd">A method, a tool or protocol for cognitive health, collective agency and a return to public life — not only a clinical treatment.</p>
         </div></div>
@@ -506,7 +520,9 @@ footer {
 
     <li>
       <div class="item">
-        <button aria-expanded="false" type="button">Safeguarding and Evaluation</button>
+        <button aria-expanded="false" type="button">
+          Safeguarding and Evaluation
+        </button>
         <div class="panel"><div>
           <p class="tbd">[Text to come.]</p>
         </div></div>
@@ -530,7 +546,6 @@ footer {
         </div></div>
       </div>
     </li>
-
   </ul>
 </main>
 
@@ -540,23 +555,17 @@ footer {
 import * as THREE from
   "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js";
 
-/* ------------------------------------------------------------------
-   TUNING — change these to adjust the look
-------------------------------------------------------------------- */
-const GRID_W   = 320;    // particles across (more = finer, heavier)
-const GRID_H   = 180;    // particles down
-const DEPTH    = 1.4;    // how far brightness pushes points in z (3D relief)
-const SWAY     = 0.14;   // slow automatic orbit, in radians
-const REPEL    = 0.22;   // how far the pointer pushes points away
+const GRID_W = 320;
+const GRID_H = 180;
+const DEPTH = 1.4;
+const SWAY = 0.14;
+const REPEL = 0.22;
 
-const hero   = document.querySelector(".hero");
-const video  = document.querySelector("#source-video");
+const hero = document.querySelector(".hero");
+const video = document.querySelector("#source-video");
 const canvas = document.querySelector("#pointcloud");
 
 if (hero && video && canvas) {
-
-  /* ---------------- Autoplay: start immediately, no click ---------------- */
-
   video.muted = true;
   video.defaultMuted = true;
   video.loop = true;
@@ -572,20 +581,22 @@ if (hero && video && canvas) {
   ["loadedmetadata", "loadeddata", "canplay"].forEach(type =>
     video.addEventListener(type, tryPlay)
   );
+
   window.addEventListener("pageshow", tryPlay);
   tryPlay();
 
   ["pointerdown", "touchstart", "keydown", "wheel", "scroll", "click"]
     .forEach(type =>
-      window.addEventListener(type, tryPlay, { once: true, passive: true })
+      window.addEventListener(type, tryPlay, {
+        once: true,
+        passive: true
+      })
     );
-
-  /* ---------------- Point cloud ---------------- */
 
   try {
     const scene = new THREE.Scene();
-
     const FOV = 45;
+
     const camera = new THREE.PerspectiveCamera(FOV, 1, 0.1, 100);
     camera.position.z = 5;
 
@@ -609,7 +620,7 @@ if (hero && video && canvas) {
         const i = y * GRID_W + x;
         const j = i * 3;
 
-        positions[j]     = x / (GRID_W - 1) - 0.5;
+        positions[j] = x / (GRID_W - 1) - 0.5;
         positions[j + 1] = 0.5 - y / (GRID_H - 1);
         positions[j + 2] = 0;
 
@@ -618,8 +629,14 @@ if (hero && video && canvas) {
     }
 
     const geometry = new THREE.BufferGeometry();
-    geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
-    geometry.setAttribute("aSeed", new THREE.BufferAttribute(seeds, 1));
+    geometry.setAttribute(
+      "position",
+      new THREE.BufferAttribute(positions, 3)
+    );
+    geometry.setAttribute(
+      "aSeed",
+      new THREE.BufferAttribute(seeds, 1)
+    );
 
     const texture = new THREE.VideoTexture(video);
     texture.minFilter = THREE.LinearFilter;
@@ -631,25 +648,25 @@ if (hero && video && canvas) {
       depthWrite: false,
 
       uniforms: {
-        uVideo:      { value: texture },
-        uTime:       { value: 0 },
-        uPointer:    { value: new THREE.Vector2(0, 0) },
-        uPlane:      { value: new THREE.Vector2(4, 3) },
+        uVideo: { value: texture },
+        uTime: { value: 0 },
+        uPointer: { value: new THREE.Vector2(0, 0) },
+        uPlane: { value: new THREE.Vector2(4, 3) },
         uResolution: { value: new THREE.Vector2(1, 1) },
-        uVideoSize:  { value: new THREE.Vector2(16, 9) },
-        uPointSize:  { value: 3.0 },
+        uVideoSize: { value: new THREE.Vector2(16, 9) },
+        uPointSize: { value: 3.0 },
         uPixelRatio: { value: pixelRatio },
-        uDepth:      { value: DEPTH },
-        uRepel:      { value: REPEL }
+        uDepth: { value: DEPTH },
+        uRepel: { value: REPEL }
       },
 
       vertexShader: `
         uniform sampler2D uVideo;
         uniform float uTime;
-        uniform vec2  uPointer;
-        uniform vec2  uPlane;
-        uniform vec2  uResolution;
-        uniform vec2  uVideoSize;
+        uniform vec2 uPointer;
+        uniform vec2 uPlane;
+        uniform vec2 uResolution;
+        uniform vec2 uVideoSize;
         uniform float uPointSize;
         uniform float uPixelRatio;
         uniform float uDepth;
@@ -657,15 +674,15 @@ if (hero && video && canvas) {
 
         attribute float aSeed;
 
-        varying vec3  vColor;
+        varying vec3 vColor;
         varying float vAlpha;
 
         void main() {
-          // Sample the video "cover"-style so it is never stretched.
           vec2 g = position.xy + 0.5;
           float sa = uResolution.x / uResolution.y;
           float va = uVideoSize.x / uVideoSize.y;
           vec2 uv = g;
+
           if (sa > va) {
             uv.y = (g.y - 0.5) * (va / sa) + 0.5;
           } else {
@@ -675,19 +692,20 @@ if (hero && video && canvas) {
           vec3 col = texture2D(uVideo, uv).rgb;
           float lum = dot(col, vec3(0.2126, 0.7152, 0.0722));
 
-          // Lay the grid over the visible screen, then lift by brightness.
-          vec3 p = vec3(position.xy * uPlane, (lum - 0.5) * uDepth);
+          vec3 p = vec3(
+            position.xy * uPlane,
+            (lum - 0.5) * uDepth
+          );
 
-          // Slow, organic drift per particle.
           p.x += sin(aSeed * 40.0 + uTime * 0.6) * 0.012;
           p.y += cos(aSeed * 27.0 + uTime * 0.5) * 0.012;
           p.z += sin(aSeed * 17.0 + uTime * 0.8) * 0.02;
 
-          // Pointer pushes nearby points away and toward the viewer.
           vec2 d = p.xy - uPointer;
           float f = exp(-dot(d, d) * 2.5);
+
           p.xy += normalize(d + vec2(0.0001)) * f * uRepel;
-          p.z  += f * 0.35;
+          p.z += f * 0.35;
 
           vec4 mv = modelViewMatrix * vec4(p, 1.0);
           gl_Position = projectionMatrix * mv;
@@ -696,14 +714,13 @@ if (hero && video && canvas) {
             (0.95 + aSeed * 0.25) *
             (5.0 / max(1.0, -mv.z));
 
-          // Original footage colours, untouched.
           vColor = col;
           vAlpha = mix(0.88, 1.0, aSeed);
         }
       `,
 
       fragmentShader: `
-        varying vec3  vColor;
+        varying vec3 vColor;
         varying float vAlpha;
 
         void main() {
@@ -720,15 +737,25 @@ if (hero && video && canvas) {
     cloud.frustumCulled = false;
     scene.add(cloud);
 
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const reducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    );
 
-    let targetX = 9, targetY = 9;   // pointer, -1..1 (9 = parked away)
-    let mouseX = 9,  mouseY = 9;    // smoothed
+    let targetX = 9;
+    let targetY = 9;
+    let mouseX = 9;
+    let mouseY = 9;
 
     hero.addEventListener("pointermove", event => {
       const rect = hero.getBoundingClientRect();
-      targetX =  ((event.clientX - rect.left) / rect.width  - 0.5) * 2;
-      targetY = -((event.clientY - rect.top)  / rect.height - 0.5) * 2;
+
+      targetX = (
+        (event.clientX - rect.left) / rect.width - 0.5
+      ) * 2;
+
+      targetY = -(
+        (event.clientY - rect.top) / rect.height - 0.5
+      ) * 2;
     });
 
     hero.addEventListener("pointerleave", () => {
@@ -737,7 +764,7 @@ if (hero && video && canvas) {
     });
 
     function resize() {
-      const width  = hero.clientWidth  || window.innerWidth;
+      const width = hero.clientWidth || window.innerWidth;
       const height = hero.clientHeight || window.innerHeight;
 
       renderer.setSize(width, height, false);
@@ -756,7 +783,7 @@ if (hero && video && canvas) {
       material.uniforms.uResolution.value.set(width, height);
 
       material.uniforms.uVideoSize.value.set(
-        video.videoWidth  || 16,
+        video.videoWidth || 16,
         video.videoHeight || 9
       );
 
@@ -773,8 +800,8 @@ if (hero && video && canvas) {
 
     resize();
 
-    // Only render while the hero is on screen.
     let heroVisible = true;
+
     if ("IntersectionObserver" in window) {
       new IntersectionObserver(entries => {
         heroVisible = entries[0].isIntersecting;
@@ -795,6 +822,7 @@ if (hero && video && canvas) {
         mouseY += (targetY - mouseY) * 0.08;
 
         const plane = material.uniforms.uPlane.value;
+
         material.uniforms.uPointer.value.set(
           mouseX * plane.x * 0.5 / 1.12,
           mouseY * plane.y * 0.5 / 1.12
@@ -803,8 +831,11 @@ if (hero && video && canvas) {
         const px = Math.max(-1, Math.min(1, mouseX));
         const py = Math.max(-1, Math.min(1, mouseY));
 
-        cloud.rotation.y = Math.sin(time * 0.18) * SWAY + px * 0.06;
-        cloud.rotation.x = Math.cos(time * 0.14) * SWAY * 0.5 + py * 0.04;
+        cloud.rotation.y =
+          Math.sin(time * 0.18) * SWAY + px * 0.06;
+
+        cloud.rotation.x =
+          Math.cos(time * 0.14) * SWAY * 0.5 + py * 0.04;
 
         material.uniforms.uTime.value = time;
       } else {
@@ -813,11 +844,9 @@ if (hero && video && canvas) {
 
       renderer.render(scene, camera);
 
-      // First cloud frame drawn: fade the plain video out underneath.
       if (!window.__pcReady && video.readyState >= 2) {
         window.__pcReady = true;
         video.style.transition = "opacity .9s ease";
-        // Not fully 0: some browsers pause fully hidden videos.
         video.style.opacity = "0.02";
       }
     }
@@ -849,44 +878,24 @@ document.querySelectorAll(".index button").forEach(button => {
   });
 });
 
-// Slow, smooth transition from the hero into the index.
+// Faster, browser-managed scrolling into the index.
 const enterLink = document.getElementById("enter-index");
 
 enterLink.addEventListener("click", event => {
   event.preventDefault();
 
   const target = document.getElementById("index-wrap");
-  const start = window.scrollY;
-  const end = target.getBoundingClientRect().top + window.scrollY;
-  const distance = end - start;
-  const duration = 1800;
-  let startTime = null;
 
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    target.scrollIntoView();
-    history.replaceState(null, "", "#index");
-    return;
-  }
+  const reduceMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
 
-  function scrollAnimation(now) {
-    if (startTime === null) startTime = now;
+  target.scrollIntoView({
+    behavior: reduceMotion ? "instant" : "smooth",
+    block: "start"
+  });
 
-    const progress = Math.min((now - startTime) / duration, 1);
-
-    const eased = progress < 0.5
-      ? 4 * progress * progress * progress
-      : 1 - Math.pow(-2 * progress + 2, 3) / 2;
-
-    window.scrollTo(0, start + distance * eased);
-
-    if (progress < 1) {
-      requestAnimationFrame(scrollAnimation);
-    } else {
-      history.replaceState(null, "", "#index");
-    }
-  }
-
-  requestAnimationFrame(scrollAnimation);
+  history.replaceState(null, "", "#index");
 });
 
 // Blue light-source cursor for devices with a precise pointer.
@@ -996,4 +1005,3 @@ enterLink.addEventListener("click", event => {
 
 </body>
 </html>
- 
