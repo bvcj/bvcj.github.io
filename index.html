@@ -106,6 +106,7 @@ html.light-cursor * {
 
 /* TITLE — magnetic wordmark (moved by the script below) */
 
+
 .title-box {
   position: relative;
   z-index: 2;
@@ -117,7 +118,10 @@ html.light-cursor * {
   text-align: center;
   font: 300 clamp(2.6rem, 9vw, 6rem)/1 var(--f-title);
   letter-spacing: .04em;
-  /* Hairline legibility edge only — delete this line for none at all. */
+
+  /* Thin cobalt frame */
+  border: 1px solid var(--cobalt);
+
   text-shadow: 0 0 .16em rgba(244,241,232,.85);
   will-change: transform;
   outline: none;
