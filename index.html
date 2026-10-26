@@ -1,9 +1,12 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Overand Institute</title>
+<meta name="theme-color" content="#f4f1e8">
+<meta name="description" content="Overand — Institute for Recovery Technologies. A Ukraine-rooted initiative at the intersection of psychoanalysis, resocialization, sound, AI, and emerging technologies.">
+<title>Overand — Institute for Recovery Technologies</title>
 
 <link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -27,23 +30,17 @@
   --paper: #f4f1e8;
   --ink: #0d0d0d;
   --cobalt: #0047ab;
-
-  /* Colour roles — the other version only changes these */
-  --lead: #0047ab;                 /* root label, founder icons, footer */
-  --mark: #0047ab;                 /* + / − markers */
-  --hover: #0047ab;                /* index hover colour */
-  --tl: rgba(0,71,171,.55);        /* tree lines */
-
+  --lead: #0047ab;
+  --mark: #0047ab;
+  --hover: #0047ab;
+  --tl: rgba(0,71,171,.55);
   --f-title: "FlorDeRuina Semilla", "Cormorant Garamond", Georgia, serif;
   --f-index: "Hershey Noailles OldFrench Regular", "Pirata One", Georgia, serif;
   --f-icon: "Yarndings 12", "Hershey Noailles OldFrench Regular", serif;
-
   color-scheme: light;
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 html {
   scroll-behavior: smooth;
@@ -55,6 +52,8 @@ body {
   background: var(--paper);
   color: var(--ink);
 }
+
+a { color: inherit; }
 
 html.light-cursor,
 html.light-cursor * {
@@ -84,28 +83,24 @@ html.light-cursor * {
   background: var(--paper);
 }
 
-#source-video {
-  position: absolute;
-  inset: 0;
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 1;
-  pointer-events: none;
-}
-
+#source-video,
 #pointcloud {
   position: absolute;
   inset: 0;
   display: block;
   width: 100%;
   height: 100%;
+}
+
+#source-video {
+  object-fit: cover;
+  opacity: 1;
   pointer-events: none;
 }
 
-/* TITLE — magnetic wordmark (moved by the script below) */
-
+#pointcloud {
+  pointer-events: none;
+}
 
 .title-box {
   position: relative;
@@ -118,11 +113,8 @@ html.light-cursor * {
   text-align: center;
   font: 300 clamp(2.6rem, 9vw, 6rem)/1 var(--f-title);
   letter-spacing: .04em;
-
-  /* Thin cobalt frame */
   background: var(--paper);
   border: 1px solid var(--cobalt);
-
   text-shadow: 0 0 .16em rgba(244,241,232,.85);
   will-change: transform;
   outline: none;
@@ -138,7 +130,6 @@ html.light-cursor * {
   margin-top: .7rem;
   font-size: .22em;
   letter-spacing: .35em;
-  text-transform: uppercase;
 }
 
 /* INDEX */
@@ -150,13 +141,6 @@ main {
   font-family: var(--f-index);
 }
 
-.tree {
-  --fs: clamp(1.5rem, 4vw, 2.3rem);
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
 .root-label {
   margin: 0 0 .1rem;
   color: var(--lead);
@@ -164,9 +148,14 @@ main {
   line-height: 1.3;
 }
 
-.index {
-  padding-left: .5rem;
+.tree {
+  --fs: clamp(1.5rem, 4vw, 2.3rem);
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
+
+.index { padding-left: .5rem; }
 
 .tree li {
   position: relative;
@@ -202,9 +191,7 @@ main {
 }
 
 .item:hover,
-.item:focus-within {
-  color: var(--hover);
-}
+.item:focus-within { color: var(--hover); }
 
 .group {
   padding: .6rem 0;
@@ -238,13 +225,11 @@ main {
   opacity: .6;
 }
 
-.index .open > button::after {
-  content: " −";
-}
+.index .open > button::after { content: " −"; }
 
 .index button:focus-visible {
   outline: 1px solid var(--cobalt);
-  outline-offset: 2px;
+  outline-offset: 3px;
 }
 
 .panel {
@@ -253,9 +238,7 @@ main {
   transition: grid-template-rows .45s ease;
 }
 
-.panel > div {
-  overflow: hidden;
-}
+.panel > div { overflow: hidden; }
 
 .panel p {
   max-width: 52rem;
@@ -263,27 +246,44 @@ main {
   padding: 0 0 1.1rem;
   font-size: clamp(1.3rem, 2.8vw, 1.7rem);
   line-height: 1.55;
+  overflow-wrap: break-word;
 }
 
-.panel p:last-child {
-  padding-bottom: 1.5rem;
+.panel p:last-child { padding-bottom: 1.5rem; }
+
+.panel h3 {
+  max-width: 52rem;
+  margin: 0;
+  padding: .3rem 0 .7rem;
+  font-size: clamp(1.4rem, 2.8vw, 1.8rem);
+  font-weight: normal;
+  line-height: 1.4;
 }
 
-.open .panel {
-  grid-template-rows: 1fr;
+.panel ul,
+.panel ol {
+  max-width: 52rem;
+  margin: 0;
+  padding: 0 0 1.5rem 1.4em;
+  font-size: clamp(1.2rem, 2.5vw, 1.55rem);
+  line-height: 1.55;
 }
 
-.tbd {
-  opacity: .55;
-  transition: opacity .35s;
+.panel li {
+  padding-left: .2rem;
+  margin-bottom: .35rem;
 }
 
+.panel li::before,
+.panel li::after { content: none; }
+
+.open .panel { grid-template-rows: 1fr; }
+
+.tbd { opacity: .55; transition: opacity .35s; }
 .item:hover .tbd,
-.item:focus-within .tbd {
-  opacity: 1;
-}
+.item:focus-within .tbd { opacity: 1; }
 
-/* FOUNDERS — one left, one right */
+/* FOUNDERS */
 
 .founders {
   display: flex;
@@ -295,9 +295,7 @@ main {
   border-top: 1px solid var(--tl);
 }
 
-.founder {
-  max-width: 26rem;
-}
+.founder { max-width: 26rem; }
 
 .founder-right {
   margin-left: auto;
@@ -314,9 +312,7 @@ main {
   line-height: 1.2;
 }
 
-.founder-right h3 {
-  justify-content: flex-end;
-}
+.founder-right h3 { justify-content: flex-end; }
 
 .glyph {
   display: inline-block;
@@ -333,7 +329,6 @@ main {
 }
 
 .founder a {
-  color: inherit;
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: .22em;
@@ -357,7 +352,7 @@ footer {
   text-transform: uppercase;
 }
 
-/* FLUID CURSOR LAYER */
+/* FLUID CURSOR */
 
 #fx {
   position: fixed;
@@ -369,59 +364,35 @@ footer {
 }
 
 @media (max-width: 600px) {
-  .hero {
-    justify-items: center;
-  }
-
-  .title-box {
-    max-width: 100%;
-  }
-
-  main {
-    margin-left: 0;
-  }
-
+  .hero { justify-items: center; }
+  .title-box { max-width: 100%; }
+  main { margin-left: 0; }
   .founder,
   .founder-right {
     margin-left: 0;
     text-align: left;
   }
-
-  .founder-right h3 {
-    justify-content: flex-start;
-  }
+  .founder-right h3 { justify-content: flex-start; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-
-  .panel {
-    transition: none;
-  }
+  html { scroll-behavior: auto; }
+  .panel { transition: none; }
 }
 </style>
 </head>
-
 <body>
 
 <canvas id="fx" aria-hidden="true"></canvas>
 
 <header class="hero">
   <div class="hero-image" aria-hidden="true">
-    <video
-      id="source-video"
+    <video id="source-video"
       src="./texture_trial.mov"
-      autoplay
-      muted
-      loop
-      playsinline
-      webkit-playsinline
-      preload="auto"
-      disablepictureinpicture
-      disableremoteplayback
-    ></video>
+      autoplay muted loop playsinline
+      webkit-playsinline preload="auto"
+      disablepictureinpicture disableremoteplayback>
+    </video>
     <canvas id="pointcloud"></canvas>
   </div>
 
@@ -431,45 +402,6 @@ footer {
   </a>
 </header>
 
-<script>
-(function () {
-  var v = document.getElementById("source-video");
-  if (!v) return;
-
-  v.muted = true;
-  v.defaultMuted = true;
-  v.setAttribute("muted", "");
-  v.playsInline = true;
-
-  function go() {
-    if (!v.paused) return;
-    var p = v.play();
-    if (p && p.catch) p.catch(function () {});
-  }
-
-  go();
-
-  ["loadedmetadata", "loadeddata", "canplay"].forEach(function (t) {
-    v.addEventListener(t, go);
-  });
-
-  window.addEventListener("pageshow", go);
-
-  document.addEventListener("visibilitychange", function () {
-    if (!document.hidden) go();
-  });
-
-  ["pointerdown", "touchstart", "keydown", "wheel", "scroll", "click"]
-    .forEach(function (t) {
-      window.addEventListener(t, go, { once: true, passive: true });
-    });
-
-  setTimeout(function () {
-    if (!window.__pcReady) v.style.opacity = "1";
-  }, 4000);
-})();
-</script>
-
 <main id="index-wrap">
   <p class="root-label" id="index">Overand</p>
 
@@ -477,66 +409,94 @@ footer {
 
     <li>
       <div class="item">
-        <button aria-expanded="false" type="button">Summary</button>
+        <button type="button" aria-expanded="false">Summary</button>
         <div class="panel"><div>
           <p>Human cognition is increasingly entangled with machines. In its fifth year of full-scale war, Ukraine is experiencing this transformation under extreme pressure: drones, nonstop livestreams, and technologically mediated trauma raise questions that extend far beyond the country.</p>
           <p>Overand is a Ukraine-rooted initiative at the intersection of psychoanalysis, resocialization, and emerging technologies. Bringing together psychotherapy and emerging tech prototyping across sound, AI, neurofeedback, and prosthetics, it develops new knowledge and applications for open-source recovery protocols.</p>
           <p>Founded by professor Bogna Konior and psychoanalyst Yuliia Leites, Overand is a non-profit institute in formation. The name signifies the cyclicality of time: recovery as the creation of new life after rupture, rather than a return to what has passed.</p>
           <p>Overand: what comes over and after the rupture.</p>
+          <p><strong>Overand — Institute for Recovery Technologies. Founded in 2026.</strong></p>
         </div></div>
       </div>
     </li>
 
     <li>
       <div class="item">
-        <button aria-expanded="false" type="button">Context</button>
+        <button type="button" aria-expanded="false">Context — A global transformation</button>
         <div class="panel"><div>
-          <p>Ukraine is now in its fifth year of full-scale war, affecting millions of people. Its army is made up of hundreds of thousands of civilians who, just a few years ago, were designers, artists, lawyers, engineers, or office workers. As they cycle in and out of military rotations, an entire society is living through dramatic change: both the frontline and cities far from it are affected by active warfare, energy blackouts, technological change, and psychological crisis. This scale matters for rehabilitation and resocialization. In peacetime, reintegration often treats veterans as a distinct group to be “brought back” into an unchanged social order. Yet veterans are not people who need to be passively reintegrated; they hail from all walks of life, returning with a new reality. How can we build spaces in which the experience of war can be carried without locking anyone into the roles of “victims” or “patients,” and in which veterans and civilians alike can shape the culture of a changed society?</p>
-          <p>Ukraine has become a global centre of defense innovation, yet innovation in how people survive, process, and recover from modern warfare has not kept pace. Meanwhile, the technology industry everywhere is turning toward the psyche: attention, sleep, stress, and mood are now design problems, increasingly addressed through biometric wearables, spatial and binaural audio, VR exposure environments, neurofeedback, and conversational AI positioned as a first line of psychological support. Nearly all of this innovation is calibrated for peacetime cognition, with little research being done on how contemporary war affects the mind, and whether new rehabilitation methods are required. Our initiative focuses on two key areas: studying how technologically accelerated modern warfare affects the human psyche, and developing open-source technological tools and social homecoming protocols that support cognitive health and collective agency.</p>
+          <p>Ukraine is now in its fifth year of full-scale war, affecting millions of people. Its army is made up of hundreds of thousands of civilians who, just a few years ago, were designers, artists, lawyers, engineers, or office workers. As they cycle in and out of military rotations, an entire society is living through dramatic change: both the frontline and cities far from it are affected by active warfare, energy blackouts, technological change, and psychological crisis.</p>
+          <p>This scale matters for rehabilitation and resocialization. In peacetime, reintegration often treats veterans as a distinct group to be “brought back” into an unchanged social order. Yet veterans are not people who need to be passively reintegrated; they hail from all walks of life, returning with a new reality. How can we build spaces in which the experience of war can be carried without locking anyone into the roles of “victims” or “patients,” and in which veterans and civilians alike can shape the culture of a changed society?</p>
+          <p>Ukraine has become a global centre of defense innovation, yet innovation in how people survive, process, and recover from modern warfare has not kept pace. Meanwhile, the technology industry everywhere is turning toward the psyche: attention, sleep, stress, and mood are now design problems, increasingly addressed through biometric wearables, spatial and binaural audio, VR exposure environments, neurofeedback, and conversational AI positioned as a first line of psychological support.</p>
+          <p>Nearly all of this innovation is calibrated for peacetime cognition, with little research being done on how contemporary war affects the mind, and whether new rehabilitation methods are required.</p>
+          <p>Our initiative focuses on two key areas: studying how technologically accelerated modern warfare affects the human psyche, and developing open-source technological tools and social homecoming protocols that support cognitive health and collective agency.</p>
         </div></div>
       </div>
     </li>
 
     <li>
       <div class="item">
-        <button aria-expanded="false" type="button">Open Questions</button>
+        <button type="button" aria-expanded="false">Open Questions</button>
         <div class="panel"><div>
           <p>Overand is operating in an open space of exploration. The institute exists to place the questions, ask them — and find the people who can answer them, in Ukraine and worldwide.</p>
           <p>Overand aims to create a feedback loop between the academic institutions and tech labs of the world and the frontier in Ukraine — where these developments are both specific to the country’s circumstances and universally relevant.</p>
-          <p>– How does technological acceleration under traumatic conditions, such as warfare, affect the human mind?</p>
-          <p>– Can technology and digital culture serve not only as tools of psychic harm but also of recovery?</p>
+          <p>Should we develop new approaches to rehabilitation in response?</p>
+          <p>Can technology and digital culture serve not only as tools of psychic harm but also of recovery?</p>
         </div></div>
       </div>
     </li>
 
     <li>
       <div class="item">
-        <button aria-expanded="false" type="button">The Pilot</button>
+        <button type="button" aria-expanded="false">The Pilot — Electronic sound as recovery technology</button>
         <div class="panel"><div>
-          <p>Founded by professor Bogna Konior and psychoanalyst Yuliia Leites, Overand is a non-profit institute in formation, working at the intersection of psychoanalysis, culture, and new recovery technologies. The name signifies the cyclicality of time: recovery as the creation of new life after rupture, rather than a return to what has passed. Its first programme is an electronic-music course for veterans, soldiers, and civilians in Kyiv, built on a successful trial completed in 2025, which convened military personnel alongside musicians, psychotherapists, educators, and civilians.</p>
-          <p>The pilot focuses on electronic sound as recovery technology. Today, warfare is sonic and auditory. Psychiatrists at Kyiv’s military hospital use the term ‘dronophobia’ to describe a new subset of shell shock. Soldiers returning to civilian areas find that scooters, fans, air conditioners, and even the buzzing of bees can reproduce the sound of a drone. These ordinary acoustic triggers make everyday activities difficult. In this context, talk therapy should not be the only available language of rehabilitation. Electronic sound, itself a ‘trigger,’ could become a component of resocialization. In our trial, where participants take a 32-lessons music composition course interlaced with collective psychotherapy sessions, workshops, listening labs, music production, and participatory sound practices allow participants to transform sounds associated with fear into new material. A soldier may not be able—or may not wish—to explain what they lived through, but can give that experience form. By working with sound, they shift from being involuntarily affected by it to becoming its author. In this ‘non-verbal’ language, experiences that resist ordinary speech can be shared with others. The course then culminated in a successful ‘graduation rave,’ where soldiers could share their creative work and wartime experience with civilians in a protected space.</p>
+          <p>The first programme is a planned electronic-music course for veterans, soldiers, and civilians in Kyiv, built on a successful trial completed in 2025 in collaboration with the music school Module Exchange, which convened military personnel alongside musicians, psychotherapists, and educators.</p>
+          <p>Today, warfare is sonic and auditory. Psychiatrists at Kyiv’s military hospital use the term ‘dronophobia’ to describe a new subset of shell shock. Soldiers returning to civilian areas find that scooters, fans, air conditioners, and even the buzzing of bees can reproduce the sound of a drone. These ordinary acoustic triggers make everyday activities difficult.</p>
+          <p>In this context, talk therapy should not be the only available language of rehabilitation. Electronic sound, itself a ‘trigger,’ could become a component of resocialization.</p>
+          <p>In our trial, participants take a 32-lesson music composition course interlaced with collective psychotherapy sessions. Workshops, listening labs, music production, and participatory sound practices allow participants to transform sounds associated with fear into new material.</p>
+          <p>A soldier may not be able—or may not wish—to explain what they lived through, but can give that experience form. By working with sound, they shift from being involuntarily affected by it to becoming its author. In this ‘non-verbal’ language, experiences that resist ordinary speech can be shared with others.</p>
+          <p>The course culminated in a successful ‘graduation rave,’ where soldiers could share their creative work and wartime experience with civilians in a protected space.</p>
         </div></div>
       </div>
     </li>
 
     <li>
       <div class="item">
-        <button aria-expanded="false" type="button">Why an Institute</button>
+        <button type="button" aria-expanded="false">Why an Institute</button>
         <div class="panel"><div>
           <p>Decades after artist Harun Farocki documented video games being used to treat PTSD, post-war recovery demands a new body of work. We believe that Ukraine can become a leader in the field of ‘recovery technologies.’ We are committed to fostering this practice, learning from other communities internationally affected by war, and creating open-source knowledge that can be adapted elsewhere.</p>
           <p>Overand Institute carries out this work: we maintain outreach; engage international funders across humanitarian, university and tech circles; integrate what we learn with psychotherapeutic and technological research on trauma and recovery; publish methodology and findings for practitioners elsewhere; and build the clinical, academic, cultural, and international partnerships that let this work travel beyond a single course or city.</p>
           <p>As a politically independent institute rather than a conventional NGO, Overand keeps the autonomy to research and develop recovery technologies directly with battalions and communities — while freely sharing validated methodologies across the network.</p>
-          <p>Dual approach – Two priorities in a continuous feedback loop</p>
+          <h3>Two priorities in a continuous feedback loop</h3>
+          <p><strong>In Ukraine — Support recovery.</strong> Learning, therapeutic support, veteran–civilian connection, and homecoming protocols.</p>
+          <p><strong>Worldwide — Build a field of knowledge.</strong> Ukrainian practitioners, artists, and thinkers develop recovery technologies through exchange with universities, festivals, and collaborators worldwide.</p>
         </div></div>
       </div>
     </li>
 
     <li>
       <div class="item">
-        <button aria-expanded="false" type="button">Partners</button>
+        <button type="button" aria-expanded="false">Recovery Technologies — Three fields of practice</button>
         <div class="panel"><div>
-          <p>Our initiatives are developed and delivered with Kyiv and international partners. An established electronic music school provides the pedagogical infrastructure, studio environment, and teaching team; their track record shows that beginners can produce and publicly perform finished work within a structured course. A club serves as a venue partner for listening sessions and public showcases, offering participants a direct route back into Kyiv’s contemporary cultural life. The programme is developed alongside practicing psychotherapists and a network of Ukrainian technologists and tech companies working on new trauma-related tools (such as a new Ukrainian biometrics system for trauma symptom measurement), while Overand holds the clinical and evaluation frameworks. As the work scales, regional cultural partners such as audio and sound spaces could host localized training and performances.</p>
-          <p>Overand also serves as a connector between Ukraine and new media practitioners. One partner, an international R&D school, is a strategic site for research, prototype development, and an exchange program, issuing open calls for Ukrainian and international scholars, engineers, and artists to build frontier tools in Ukraine—spatial sound, AR/VR, biosensors, and AI-driven therapeutic instruments. Our networks at international universities are mobilized for the same purpose.</p>
+          <h3>01 — Sound · Immediate practice</h3>
+          <p>Sound is a weapon and environment of war — drones, missiles, alerts, threatening silence. It can also be a technology of recovery, reaching the body and mind where language cannot.</p>
+          <h3>02 — AI, Neurofeedback &amp; Prosthetics · Desired development</h3>
+          <p>Closed community agents, therapeutic neurofeedback interfaces, and human–machine cognition in care.</p>
+          <p>Prosthetics as sensory interfaces. Exploring sensation and self-image as people reconnect with a changed body after war injury.</p>
+          <h3>03 — Psychedelics · Long-term horizon</h3>
+          <p>Sound, setting, and technological augmentation of integration protocols for psychedelic-assisted therapy — pending legal and clinical permissions.</p>
+        </div></div>
+      </div>
+    </li>
+
+    <li>
+      <div class="item">
+        <button type="button" aria-expanded="false">Partners</button>
+        <div class="panel"><div>
+          <p>Our initiatives are developed and delivered with Kyiv and international partners. An established electronic music school provides the pedagogical infrastructure, studio environment, and teaching team; their track record shows that beginners can produce and publicly perform finished work within a structured course.</p>
+          <p>A club serves as a venue partner for listening sessions and public showcases, offering participants a direct route back into Kyiv’s contemporary cultural life. The programme is developed alongside practicing psychotherapists and a network of Ukrainian technologists and tech companies working on new trauma-related tools, such as a new Ukrainian biometrics system for trauma symptom measurement, while Overand holds the clinical and evaluation frameworks.</p>
+          <p>As the work scales, regional cultural partners such as audio and sound spaces could host localized training and performances.</p>
+          <p>Overand also serves as a connector between Ukraine and new media practitioners. An international R&amp;D school is a strategic site for research, prototype development, and an exchange program, issuing open calls for Ukrainian and international scholars, engineers, and artists to build frontier tools in Ukraine — spatial sound, AR/VR, biosensors, and AI-driven therapeutic instruments.</p>
+          <p>Our networks at international universities are mobilized for the same purpose.</p>
           <p>Beyond 2027 the network extends to universities and art schools, music festivals, internationally recognised musicians, a wearables research programme, a rehabilitation center, and listening-session hosts across Ukraine, including monasteries, cultural spaces, and military hospitals.</p>
         </div></div>
       </div>
@@ -544,34 +504,118 @@ footer {
 
     <li>
       <div class="item group">
-        Development: Scaling up the Pilot
-        <span class="note">Detailed plan &amp; budget available upon request</span>
+        Planned programme
+        <span class="note">A test run — with immediate feedback on what works and what does not</span>
       </div>
       <ul class="tree">
 
         <li>
           <div class="item">
-            <button aria-expanded="false" type="button">Stage 1 — Test the model</button>
+            <button type="button" aria-expanded="false">Overview — Two priorities</button>
             <div class="panel"><div>
-              <p>The 2025 pilot ran fully in person in Kyiv, with twenty participants, though hundreds applied. Participation depended on travelling safely under blackouts, curfews, and military rotations. Now, we rebuild the course as a hybrid, nationally accessible resource: asynchronous lessons and remote participation as the backbone, with periodic in-person studio sessions. A national open call targets at least 50 participants, with outreach to women and LGBTQ+ service members via trusted veteran networks, culminating in a public graduation performance in Kyiv and an exchange with producers in Berlin and London. In parallel we found the Institute, establish evaluation and safeguarding protocols, and map existing and potential Ukrainian recovery technologies across emerging trends.</p>
+              <p>Support recovery. Build a field of knowledge. Throughout the year our two priorities exist in a continuous feedback loop.</p>
+              <h3>In Ukraine — Support recovery</h3>
+              <ol>
+                <li>Music school</li>
+                <li>Listening Sessions</li>
+                <li>Prosthetics research</li>
+              </ol>
+              <h3>Worldwide — Build a field of knowledge</h3>
+              <ol>
+                <li>University workshops</li>
+                <li>Residencies at an international R&amp;D school</li>
+                <li>Showcase exchanges with internationally recognised musicians and European DJ scenes</li>
+                <li>Future: a special project with a music festival</li>
+              </ol>
+              <p>International exchanges and workshops are already underway.</p>
             </div></div>
           </div>
         </li>
 
         <li>
           <div class="item">
-            <button aria-expanded="false" type="button">Stage 2 — Build a school</button>
+            <button type="button" aria-expanded="false">Music School — The hybrid course</button>
             <div class="panel"><div>
-              <p>The course becomes a multi-track: a broad introductory track for 500+ participants alongside specialized small-group learning in advanced electronic production, spatial sound, moving images, VJing, and applied digital arts, with continued psychotherapy sessions and facilitator training for top graduates. Relationships with veteran-care bodies, including the Ministry of Veterans Affairs, are formalized. The Institute launches its first international R&amp;D call with Stella Matutina and NYU, co-developing recovery tools tailored to needs identified in the pilot, and tests them across Ukrainian studios, universities, and clinical settings, yielding open-source toolkits and recovery protocols for public use.</p>
+              <h3>January–August 2027 — Proposed hybrid-course test</h3>
+              <p>Can an existing offline course for 20 students become an effective hybrid course — resolving cost, security, and scale while opening a broader network?</p>
+              <ol>
+                <li>Produce the hybrid course.</li>
+                <li>Test with a first cohort.</li>
+                <li>Correct mistakes.</li>
+                <li>Run a second cohort.</li>
+              </ol>
+              <h3>September–December 2027 — The next question</h3>
+              <p>How can we make this music course, as a clinic, new, tech-forward, and unique?</p>
             </div></div>
           </div>
         </li>
 
         <li>
           <div class="item">
-            <button aria-expanded="false" type="button">Stage 3 — Transfer</button>
+            <button type="button" aria-expanded="false">Music School — Technology possibilities</button>
             <div class="panel"><div>
-              <p>The curriculum and a certified facilitator network are embedded directly into Ukrainian universities and rehabilitation centres, train-the-trainer programmes are formalized, and regional partners deliver independently. A recurring national festival in western Ukraine unites military personnel, veterans, clinicians, educators, artists, and technology developers through music, new-media art, and public dialogue. The Institute sustains annual research cycles and publishes in Ukrainian and English. The endpoint is a self-sustaining, Ukrainian-led institution with governance and operations handed to local leadership.</p>
+              <h3>September–December 2027</h3>
+              <h3>Community AI agent</h3>
+              <p>A closed agent for music school students and the Ukrainian electronic scene: course material, collaborator matching, cohort connection. Developed with the digital lab of an art and design university.</p>
+              <p>What if AI modulates connection and community — and also serves as a therapeutic agent?</p>
+              <h3>Collective body tuning</h3>
+              <p>Real-time EEG and bodily feedback in listening environments and synthesis. Developed with a university research partner.</p>
+              <p>What changes in attention and emotional regulation when bodily signals directly modulate the sound environment?</p>
+            </div></div>
+          </div>
+        </li>
+
+        <li>
+          <div class="item">
+            <button type="button" aria-expanded="false">International Pathways — Mentorship &amp; research</button>
+            <div class="panel"><div>
+              <p>How do we give our students — veterans — access to the wider culture and the world? How can we make the world interested in Ukrainian recovery, and empower its practitioners to be present in it?</p>
+              <h3>Mentorship</h3>
+              <ul>
+                <li>An internationally renowned music festival to curate a mentorship program for our music school students.</li>
+                <li>An acclaimed musician and writer on sonic warfare to conduct a sonic reconnaissance project with music school students.</li>
+                <li>A recovery-tech stream at our partner R&amp;D school, taught and mediated by Bogna Konior and Yuliia Leites.</li>
+              </ul>
+              <h3>Academic R&amp;D</h3>
+              <ul>
+                <li>Lectures and workshops on recovery technologies with partner universities.</li>
+                <li>A “Recovery Technologies Workshop” with a university arts school and Ukrainian studies department, with participation of Ukrainian practitioners and researchers.</li>
+                <li>A workshop at an art and design university on the development of therapeutic and voice-based AI agents.</li>
+              </ul>
+            </div></div>
+          </div>
+        </li>
+
+        <li>
+          <div class="item">
+            <button type="button" aria-expanded="false">Listening Sessions — Bridging communities</button>
+            <div class="panel"><div>
+              <p>How can our graduates bridge veteran and civilian communities — and serve other underserved groups, such as women and children?</p>
+              <h3>For underserved people</h3>
+              <p>Women, children, and civilians directly affected by wartime trauma.</p>
+              <h3>Process — Site-specific listening</h3>
+              <p>Course graduates and musicians bring collective listening sessions into communities, connecting veterans and civilians through shared listening. Sessions take place in monasteries, churches, bomb shelters, museums, and rehabilitation hospitals.</p>
+              <h3>Established partners</h3>
+              <p>Monasteries, sound and cultural spaces, rehabilitation centers, and military hospitals across Ukraine.</p>
+            </div></div>
+          </div>
+        </li>
+
+        <li>
+          <div class="item">
+            <button type="button" aria-expanded="false">Prosthetics — The body after war</button>
+            <div class="panel"><div>
+              <p>And if we dreamed big — could this grow into a whole portfolio of recovery technology projects?</p>
+              <p>Among the many people without limbs and wounded by war — a topic still barely present in Ukrainian society — can we actually do something with it? Can we open a dialogue around this topic? Could the discussion around it itself be therapeutic?</p>
+              <p>The prosthesis as a site of cultural imagination — not only of medical repair.</p>
+              <h3>01 — Design &amp; jewelry</h3>
+              <p>Assemble graphic artists and engineers to explore prosthetic design options — and jewelry for prosthetics.</p>
+              <h3>02 — Website &amp; curation</h3>
+              <p>Develop a website and a curated presentation of the explorations — and a club conference on cyborg body culture.</p>
+              <h3>03 — Art &amp; design university</h3>
+              <p>A wearables research programme — a special Ukraine stream.</p>
+              <p>Can this be developed in Ukraine, by Ukrainian people, with international artists contributing — and can the dialogue itself be part of recovery?</p>
+              <p>In collaboration with a rehabilitation center.</p>
             </div></div>
           </div>
         </li>
@@ -580,30 +624,24 @@ footer {
     </li>
 
     <li>
-      <div class="item">
-        <button aria-expanded="false" type="button">Sustainability</button>
-        <div class="panel"><div>
-          <p>Because we are building a durable institution and not only delivering a single programme, our reporting documents both activities completed and what we learn about the wider potential of recovery-technology practice in Ukraine. From the outset we commit to diversifying funding, training Ukrainian facilitators, documenting our methodology, and progressively transferring governance and operational responsibility to local leadership. Our goal is an independent institution able to originate and manage its own initiatives beyond this pilot, exploring a greater variety of recovery technologies, and establishing Ukraine as a leader in this emerging field.</p>
-        </div></div>
+      <div class="item group">
+        How You Can Help
+        <span class="note">Let’s build Overand together!</span>
       </div>
-    </li>
-
-    <li>
-      <div class="item group">How You Can Help</div>
       <ul class="tree">
 
         <li>
           <div class="item">
-            <button aria-expanded="false" type="button">Funders</button>
+            <button type="button" aria-expanded="false">Funders</button>
             <div class="panel"><div>
-              <p>The board of the Arthur Waser Foundation has agreed in principle to fund the pilot. We are looking for two further partners to join them. A detailed description, budget and delivery timeline are available on request, and we are glad to discuss support restricted to a single component.</p>
+              <p>Foundations, private funders, and tech companies interested in this work are warmly invited to get in touch. A detailed budget and timeline are available on request, and support can go to the institute as a whole or to a single project.</p>
             </div></div>
           </div>
         </li>
 
         <li>
           <div class="item">
-            <button aria-expanded="false" type="button">Universities and research centres</button>
+            <button type="button" aria-expanded="false">Universities and research centres</button>
             <div class="panel"><div>
               <p>We are looking for partners to co-develop evaluation methodology, host elective modules or placements, and co-publish findings in Ukrainian and English. Departments in psychology, engineering, media arts, and rehabilitation sciences are all relevant.</p>
             </div></div>
@@ -612,16 +650,16 @@ footer {
 
         <li>
           <div class="item">
-            <button aria-expanded="false" type="button">Artists, producers, and venues</button>
+            <button type="button" aria-expanded="false">Artists, producers, and venues</button>
             <div class="panel"><div>
-              <p>We welcome local and international mentors skilled in new media production, hosts for listening sessions and showcases, and clubs and festivals willing to take Ukrainian soldiers onto their lineups.</p>
+              <p>We welcome local and international mentors skilled in new media production, hosts for listening sessions and showcases, and clubs and festivals willing to take Ukrainian soldiers and artists onto their lineups.</p>
             </div></div>
           </div>
         </li>
 
         <li>
           <div class="item">
-            <button aria-expanded="false" type="button">Clinicians and technologists</button>
+            <button type="button" aria-expanded="false">Clinicians and technologists</button>
             <div class="panel"><div>
               <p>We are assembling both the clinical supervision and safeguarding side of the programme and the R&amp;D that follows it — spatial sound, AR/VR, biosensors. If you work in trauma care, or you build tools, we would love to hear from you.</p>
             </div></div>
@@ -633,76 +671,83 @@ footer {
 
   </ul>
 
-  <section class="founders" aria-label="Founders">
+  
+<section class="founders" aria-label="Founders">
 
-    <article class="founder founder-left">
-      <h3><span class="glyph" aria-hidden="true">G</span> Yuliia Leites</h3>
-      <p>
-        <a href="https://yuliialeites.com" target="_blank" rel="noopener">yuliialeites.com</a><br>
-        <a href="mailto:yuliia.leites@gmail.com">yuliia.leites@gmail.com</a>
-      </p>
-    </article>
+  <article class="founder founder-left">
+    <h3><span class="glyph" aria-hidden="true">G</span> Yuliia Leites</h3>
+    <p>
+      <a href="https://yuliialeites.com" target="_blank" rel="noopener">yuliialeites.com</a><br>
+      <a href="https://www.instagram.com/sugar_prawn/" target="_blank" rel="noopener">@sugar_prawn</a><br>
+      <a href="mailto:yuliia.leites@gmail.com">yuliia.leites@gmail.com</a>
+    </p>
+  </article>
 
-    <article class="founder founder-right">
-      <h3><span class="glyph" aria-hidden="true">F</span> Bogna Konior</h3>
-      <p>
-        <a href="https://bognamk.com" target="_blank" rel="noopener">bognamk.com</a><br>
-        <a href="mailto:bogna@nyu.edu">bogna@nyu.edu</a>
-      </p>
-    </article>
+  <article class="founder founder-right">
+    <h3><span class="glyph" aria-hidden="true">F</span> Bogna Konior</h3>
+    <p>
+      <a href="https://bognamk.com" target="_blank" rel="noopener">bognamk.com</a><br>
+      <a href="https://www.instagram.com/bognamk/" target="_blank" rel="noopener">@bognamk</a><br>
+      <a href="mailto:bogna@nyu.edu">bogna@nyu.edu</a>
+    </p>
+  </article>
 
-  </section>
+</section>
 </main>
 
-<footer>Overand Institute</footer>
+<footer>Overand — Institute for Recovery Technologies · Founded in 2026</footer>
+
+<script>
+/* VIDEO PLAYBACK */
+(function () {
+  const video = document.getElementById("source-video");
+  if (!video) return;
+
+  video.muted = true;
+  video.defaultMuted = true;
+  video.playsInline = true;
+
+  function play() {
+    if (video.paused) {
+      const attempt = video.play();
+      if (attempt && attempt.catch) attempt.catch(() => {});
+    }
+  }
+
+  ["loadedmetadata", "loadeddata", "canplay"].forEach(event => {
+    video.addEventListener(event, play);
+  });
+
+  window.addEventListener("pageshow", play);
+
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden) play();
+  });
+
+  ["pointerdown", "touchstart", "keydown", "wheel"].forEach(event => {
+    window.addEventListener(event, play, {
+      once: true,
+      passive: true
+    });
+  });
+
+  play();
+})();
+</script>
 
 <script type="module">
 import * as THREE from
   "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js";
 
-const GRID_W = 320;
-const GRID_H = 180;
-const DEPTH = 1.4;
-const SWAY = 0.14;
-const REPEL = 0.22;
-
+/* VIDEO POINT CLOUD */
 const hero = document.querySelector(".hero");
-const video = document.querySelector("#source-video");
-const canvas = document.querySelector("#pointcloud");
+const video = document.getElementById("source-video");
+const canvas = document.getElementById("pointcloud");
 
 if (hero && video && canvas) {
-  video.muted = true;
-  video.defaultMuted = true;
-  video.loop = true;
-  video.playsInline = true;
-  video.setAttribute("muted", "");
-
-  function tryPlay() {
-    if (!video.paused) return;
-    const attempt = video.play();
-    if (attempt && attempt.catch) attempt.catch(() => {});
-  }
-
-  ["loadedmetadata", "loadeddata", "canplay"].forEach(type =>
-    video.addEventListener(type, tryPlay)
-  );
-
-  window.addEventListener("pageshow", tryPlay);
-  tryPlay();
-
-  ["pointerdown", "touchstart", "keydown", "wheel", "scroll", "click"]
-    .forEach(type =>
-      window.addEventListener(type, tryPlay, {
-        once: true,
-        passive: true
-      })
-    );
-
   try {
     const scene = new THREE.Scene();
-    const FOV = 45;
-
-    const camera = new THREE.PerspectiveCamera(FOV, 1, 0.1, 100);
+    const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
     camera.position.z = 5;
 
     const renderer = new THREE.WebGLRenderer({
@@ -712,32 +757,36 @@ if (hero && video && canvas) {
       powerPreference: "high-performance"
     });
 
-    const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
-    renderer.setPixelRatio(pixelRatio);
+    renderer.setPixelRatio(
+      Math.min(window.devicePixelRatio || 1, 1.5)
+    );
+
     renderer.setClearColor(0x000000, 0);
 
-    const count = GRID_W * GRID_H;
+    const cols = 260;
+    const rows = 146;
+    const count = cols * rows;
+
     const positions = new Float32Array(count * 3);
     const seeds = new Float32Array(count);
 
-    for (let y = 0; y < GRID_H; y++) {
-      for (let x = 0; x < GRID_W; x++) {
-        const i = y * GRID_W + x;
-        const j = i * 3;
-
-        positions[j] = x / (GRID_W - 1) - 0.5;
-        positions[j + 1] = 0.5 - y / (GRID_H - 1);
-        positions[j + 2] = 0;
-
+    for (let y = 0; y < rows; y++) {
+      for (let x = 0; x < cols; x++) {
+        const i = y * cols + x;
+        positions[i * 3] = x / (cols - 1) - 0.5;
+        positions[i * 3 + 1] = 0.5 - y / (rows - 1);
+        positions[i * 3 + 2] = 0;
         seeds[i] = Math.random();
       }
     }
 
     const geometry = new THREE.BufferGeometry();
+
     geometry.setAttribute(
       "position",
       new THREE.BufferAttribute(positions, 3)
     );
+
     geometry.setAttribute(
       "aSeed",
       new THREE.BufferAttribute(seeds, 1)
@@ -751,18 +800,17 @@ if (hero && video && canvas) {
     const material = new THREE.ShaderMaterial({
       transparent: true,
       depthWrite: false,
-
       uniforms: {
         uVideo: { value: texture },
         uTime: { value: 0 },
-        uPointer: { value: new THREE.Vector2(0, 0) },
-        uPlane: { value: new THREE.Vector2(4, 3) },
+        uPointer: { value: new THREE.Vector2(9, 9) },
+        uPlane: { value: new THREE.Vector2(5, 3) },
         uResolution: { value: new THREE.Vector2(1, 1) },
         uVideoSize: { value: new THREE.Vector2(16, 9) },
-        uPointSize: { value: 3.0 },
-        uPixelRatio: { value: pixelRatio },
-        uDepth: { value: DEPTH },
-        uRepel: { value: REPEL }
+        uPointSize: { value: 2.5 },
+        uPixelRatio: {
+          value: Math.min(window.devicePixelRatio || 1, 1.5)
+        }
       },
 
       vertexShader: `
@@ -774,24 +822,23 @@ if (hero && video && canvas) {
         uniform vec2 uVideoSize;
         uniform float uPointSize;
         uniform float uPixelRatio;
-        uniform float uDepth;
-        uniform float uRepel;
 
         attribute float aSeed;
-
         varying vec3 vColor;
         varying float vAlpha;
 
         void main() {
-          vec2 g = position.xy + 0.5;
-          float sa = uResolution.x / uResolution.y;
-          float va = uVideoSize.x / uVideoSize.y;
-          vec2 uv = g;
+          vec2 uv = position.xy + 0.5;
 
-          if (sa > va) {
-            uv.y = (g.y - 0.5) * (va / sa) + 0.5;
+          float screenAspect = uResolution.x / uResolution.y;
+          float videoAspect = uVideoSize.x / uVideoSize.y;
+
+          if (screenAspect > videoAspect) {
+            uv.y = (uv.y - 0.5) *
+              (videoAspect / screenAspect) + 0.5;
           } else {
-            uv.x = (g.x - 0.5) * (sa / va) + 0.5;
+            uv.x = (uv.x - 0.5) *
+              (screenAspect / videoAspect) + 0.5;
           }
 
           vec3 col = texture2D(uVideo, uv).rgb;
@@ -799,7 +846,7 @@ if (hero && video && canvas) {
 
           vec3 p = vec3(
             position.xy * uPlane,
-            (lum - 0.5) * uDepth
+            (lum - 0.5) * 1.4
           );
 
           p.x += sin(aSeed * 40.0 + uTime * 0.6) * 0.012;
@@ -809,7 +856,7 @@ if (hero && video && canvas) {
           vec2 d = p.xy - uPointer;
           float f = exp(-dot(d, d) * 2.5);
 
-          p.xy += normalize(d + vec2(0.0001)) * f * uRepel;
+          p.xy += normalize(d + vec2(0.0001)) * f * 0.22;
           p.z += f * 0.35;
 
           vec4 mv = modelViewMatrix * vec4(p, 1.0);
@@ -850,6 +897,8 @@ if (hero && video && canvas) {
     let targetY = 9;
     let mouseX = 9;
     let mouseY = 9;
+    let visible = true;
+    let frameId = 0;
 
     hero.addEventListener("pointermove", event => {
       const rect = hero.getBoundingClientRect();
@@ -873,16 +922,15 @@ if (hero && video && canvas) {
       const height = hero.clientHeight || window.innerHeight;
 
       renderer.setSize(width, height, false);
-
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
 
-      const visibleH = 2 * camera.position.z *
-        Math.tan(THREE.MathUtils.degToRad(FOV / 2));
+      const visibleHeight = 2 * camera.position.z *
+        Math.tan(THREE.MathUtils.degToRad(45 / 2));
 
       material.uniforms.uPlane.value.set(
-        visibleH * camera.aspect * 1.12,
-        visibleH * 1.12
+        visibleHeight * camera.aspect * 1.12,
+        visibleHeight * 1.12
       );
 
       material.uniforms.uResolution.value.set(width, height);
@@ -893,7 +941,7 @@ if (hero && video && canvas) {
       );
 
       material.uniforms.uPointSize.value =
-        Math.max(2.2, (width / GRID_W) * 0.95);
+        Math.max(2, width / cols * 0.95);
     }
 
     window.addEventListener("resize", resize);
@@ -903,26 +951,22 @@ if (hero && video && canvas) {
       new ResizeObserver(resize).observe(hero);
     }
 
-    resize();
-
-    let heroVisible = true;
-
     if ("IntersectionObserver" in window) {
       new IntersectionObserver(entries => {
-        heroVisible = entries[0].isIntersecting;
+        visible = entries[0].isIntersecting;
       }).observe(hero);
     }
 
     const clock = new THREE.Clock();
 
     function animate() {
-      requestAnimationFrame(animate);
-      if (!heroVisible) return;
+      frameId = requestAnimationFrame(animate);
+
+      if (!visible || document.hidden) return;
 
       const time = clock.getElapsedTime();
-      const still = reducedMotion.matches;
 
-      if (!still) {
+      if (!reducedMotion.matches) {
         mouseX += (targetX - mouseX) * 0.08;
         mouseY += (targetY - mouseY) * 0.08;
 
@@ -933,14 +977,11 @@ if (hero && video && canvas) {
           mouseY * plane.y * 0.5 / 1.12
         );
 
-        const px = Math.max(-1, Math.min(1, mouseX));
-        const py = Math.max(-1, Math.min(1, mouseY));
-
         cloud.rotation.y =
-          Math.sin(time * 0.18) * SWAY + px * 0.06;
+          Math.sin(time * 0.18) * 0.14 + mouseX * 0.06;
 
         cloud.rotation.x =
-          Math.cos(time * 0.14) * SWAY * 0.5 + py * 0.04;
+          Math.cos(time * 0.14) * 0.07 + mouseY * 0.04;
 
         material.uniforms.uTime.value = time;
       } else {
@@ -949,21 +990,20 @@ if (hero && video && canvas) {
 
       renderer.render(scene, camera);
 
-      if (!window.__pcReady && video.readyState >= 2) {
-        window.__pcReady = true;
-        video.style.transition = "opacity .9s ease";
+      if (video.readyState >= 2) {
         video.style.opacity = "0.02";
       }
     }
 
-    animate();
-
     document.addEventListener("visibilitychange", () => {
       if (!document.hidden) {
-        tryPlay();
+        if (video.paused) video.play().catch(() => {});
         resize();
       }
     });
+
+    resize();
+    animate();
 
   } catch (error) {
     console.error("Overand point-cloud error:", error);
@@ -973,7 +1013,7 @@ if (hero && video && canvas) {
 </script>
 
 <script>
-// Expand and collapse index sections.
+/* EXPAND AND COLLAPSE INDEX */
 document.querySelectorAll(".index button").forEach(button => {
   button.addEventListener("click", () => {
     const item = button.parentElement;
@@ -983,44 +1023,43 @@ document.querySelectorAll(".index button").forEach(button => {
   });
 });
 
-// Browser-managed smooth scroll into the index.
+/* SMOOTH SCROLL TO INDEX */
 const enterLink = document.getElementById("enter-index");
 
-enterLink.addEventListener("click", event => {
-  event.preventDefault();
+if (enterLink) {
+  enterLink.addEventListener("click", event => {
+    event.preventDefault();
 
-  const target = document.getElementById("index-wrap");
+    const target = document.getElementById("index-wrap");
 
-  const reduceMotion = window.matchMedia(
-    "(prefers-reduced-motion: reduce)"
-  ).matches;
+    const reduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
 
-  target.scrollIntoView({
-    behavior: reduceMotion ? "instant" : "smooth",
-    block: "start"
+    target.scrollIntoView({
+      behavior: reduced ? "auto" : "smooth",
+      block: "start"
+    });
+
+    history.replaceState(null, "", "#index");
   });
+}
 
-  history.replaceState(null, "", "#index");
-});
-
-/* ------------------------------------------------------------------
-   MAGNETIC LOGO
-   The wordmark is pulled toward the pointer when it gets close and
-   eases back when it leaves. The two lines drift slightly against
-   each other for depth.
-------------------------------------------------------------------- */
+/* MAGNETIC WORDMARK */
 (function () {
-  if (!matchMedia("(pointer: fine)").matches) return;
-  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  if (!window.matchMedia("(pointer: fine)").matches) return;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
   const link = document.getElementById("enter-index");
+  if (!link) return;
+
   const word = link.querySelector(".mag-word");
   const sub = link.querySelector("small");
 
-  const PULL = 0.34;      // how far it follows the pointer (0–1)
-  const MAX = 46;         // maximum travel in px
-  const REACH = 90;       // extra px around the logo where the pull starts
-  const EASE = 0.14;      // spring-back speed
+  const PULL = 0.34;
+  const MAX = 46;
+  const REACH = 90;
+  const EASE = 0.14;
 
   let px = -9999;
   let py = -9999;
@@ -1041,14 +1080,12 @@ enterLink.addEventListener("click", event => {
   function tick() {
     const r = link.getBoundingClientRect();
 
-    // Resting centre = current centre minus the offset we applied.
     const rx = r.left + r.width / 2 - cx;
     const ry = r.top + r.height / 2 - cy;
 
     const dx = px - rx;
     const dy = py - ry;
     const dist = Math.hypot(dx, dy);
-
     const reach = Math.max(r.width, r.height) * 0.75 + REACH;
 
     let tx = 0;
@@ -1063,6 +1100,7 @@ enterLink.addEventListener("click", event => {
       ty = dy * PULL * s;
 
       const len = Math.hypot(tx, ty);
+
       if (len > MAX) {
         tx = tx / len * MAX;
         ty = ty / len * MAX;
@@ -1076,13 +1114,13 @@ enterLink.addEventListener("click", event => {
     cs += (ts - cs) * EASE;
 
     link.style.transform =
-      "translate3d(" + cx.toFixed(2) + "px," + cy.toFixed(2) + "px,0) scale(" + cs.toFixed(4) + ")";
+      `translate3d(${cx}px,${cy}px,0) scale(${cs})`;
 
     word.style.transform =
-      "translate3d(" + (cx * 0.22).toFixed(2) + "px," + (cy * 0.22).toFixed(2) + "px,0)";
+      `translate3d(${cx * 0.22}px,${cy * 0.22}px,0)`;
 
     sub.style.transform =
-      "translate3d(" + (-cx * 0.14).toFixed(2) + "px," + (-cy * 0.14).toFixed(2) + "px,0)";
+      `translate3d(${-cx * 0.14}px,${-cy * 0.14}px,0)`;
 
     requestAnimationFrame(tick);
   }
@@ -1090,252 +1128,149 @@ enterLink.addEventListener("click", event => {
   requestAnimationFrame(tick);
 })();
 
-/* ------------------------------------------------------------------
-   FLUID CURSOR
-   A chain of springy blobs merged into one liquid shape by a WebGL
-   metaball shader. It stretches when you move fast, pools into a drop
-   when you stop, swells over links and buttons, and squeezes on click.
-------------------------------------------------------------------- */
+/* FLUID-STYLE CURSOR */
 (function () {
-  if (!matchMedia("(pointer: fine)").matches) return;
-
-  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!window.matchMedia("(pointer: fine)").matches) return;
 
   const canvas = document.getElementById("fx");
-  const gl = canvas.getContext("webgl", {
-    alpha: true,
-    premultipliedAlpha: true,
-    antialias: false,
-    powerPreference: "high-performance"
-  });
+  if (!canvas) return;
 
-  if (!gl) return;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return;
 
-  const N = 22;          // blobs in the chain
-  const BASE = 4.6;      // head radius in CSS px
-  const FOLLOW = 0.34;   // how tightly each blob follows the one before
+  const reduced = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
 
-  const vertexSrc =
-    "attribute vec2 a; void main(){ gl_Position = vec4(a, 0.0, 1.0); }";
-
-  const fragmentSrc = `
-    #ifdef GL_FRAGMENT_PRECISION_HIGH
-    precision highp float;
-    #else
-    precision mediump float;
-    #endif
-
-    #define N ${N}
-
-    uniform vec3 uP[N];     // x, y (device px, origin bottom-left), radius
-    uniform float uFade;
-
-    void main() {
-      vec2 p = gl_FragCoord.xy;
-      float f = 0.0;
-
-      for (int i = 0; i < N; i++) {
-        vec2 d = p - uP[i].xy;
-        float R = uP[i].z * 2.4;
-        float t = max(0.0, 1.0 - dot(d, d) / (R * R));
-        f += t * t * t;
-      }
-
-      float body = smoothstep(0.34, 0.46, f);
-      if (body < 0.002) discard;
-
-      vec3 deep   = vec3(0.0, 0.16, 0.44);
-      vec3 cobalt = vec3(0.0, 0.278, 0.671);
-      vec3 light  = vec3(0.62, 0.80, 1.0);
-
-      vec3 col = mix(deep, cobalt, smoothstep(0.4, 0.95, f));
-      col = mix(col, light, smoothstep(1.2, 2.6, f) * 0.6);
-
-      float a = body * 0.94 * uFade;
-      gl_FragColor = vec4(col * a, a);
-    }
-  `;
-
-  function compile(type, src) {
-    const shader = gl.createShader(type);
-    gl.shaderSource(shader, src);
-    gl.compileShader(shader);
-
-    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-      console.error("Fluid cursor shader:", gl.getShaderInfoLog(shader));
-      return null;
-    }
-
-    return shader;
-  }
-
-  const vs = compile(gl.VERTEX_SHADER, vertexSrc);
-  const fs = compile(gl.FRAGMENT_SHADER, fragmentSrc);
-
-  if (!vs || !fs) return;
-
-  const program = gl.createProgram();
-  gl.attachShader(program, vs);
-  gl.attachShader(program, fs);
-  gl.linkProgram(program);
-
-  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-    console.error("Fluid cursor program:", gl.getProgramInfoLog(program));
-    return;
-  }
-
-  gl.useProgram(program);
-
-  const buffer = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-  gl.bufferData(
-    gl.ARRAY_BUFFER,
-    new Float32Array([-1, -1, 3, -1, -1, 3]),
-    gl.STATIC_DRAW
+  const N = 22;
+  const BASE = 4.6;
+  const FOLLOW = 0.34;
+  const points = Array.from(
+    { length: N },
+    () => ({ x: -9999, y: -9999 })
   );
 
-  const aLoc = gl.getAttribLocation(program, "a");
-  gl.enableVertexAttribArray(aLoc);
-  gl.vertexAttribPointer(aLoc, 2, gl.FLOAT, false, 0, 0);
-
-  const uP = gl.getUniformLocation(program, "uP[0]") ||
-             gl.getUniformLocation(program, "uP");
-  const uFade = gl.getUniformLocation(program, "uFade");
-
-  // Everything compiled — hide the native cursor.
-  document.documentElement.classList.add("light-cursor");
-
-  const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
-  let W = 0;
-  let H = 0;
+  let width = 0;
+  let height = 0;
+  let dpr = 1;
+  let mx = -9999;
+  let my = -9999;
+  let seen = false;
+  let started = false;
+  let hover = 1;
+  let hoverTarget = 1;
+  let press = 1;
+  let pressTarget = 1;
 
   function resize() {
-    W = Math.round(window.innerWidth * dpr);
-    H = Math.round(window.innerHeight * dpr);
-    canvas.width = W;
-    canvas.height = H;
-    gl.viewport(0, 0, W, H);
+    dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+    width = window.innerWidth;
+    height = window.innerHeight;
+
+    canvas.width = Math.round(width * dpr);
+    canvas.height = Math.round(height * dpr);
+    canvas.style.width = width + "px";
+    canvas.style.height = height + "px";
+
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
 
   resize();
   window.addEventListener("resize", resize);
 
-  const pts = [];
-  for (let i = 0; i < N; i++) pts.push({ x: -9999, y: -9999 });
-
-  const data = new Float32Array(N * 3);
-
-  let mx = -9999;
-  let my = -9999;
-  let seen = false;
-  let started = false;
-
-  let hoverTarget = 1;
-  let hover = 1;
-  let pressTarget = 1;
-  let press = 1;
-  let fade = 0;
-
   window.addEventListener("pointermove", event => {
-    mx = event.clientX * dpr;
-    my = event.clientY * dpr;
+    mx = event.clientX;
+    my = event.clientY;
     seen = true;
 
     if (!started) {
       started = true;
-      for (const p of pts) {
-        p.x = mx;
-        p.y = my;
-      }
+      points.forEach(point => {
+        point.x = mx;
+        point.y = my;
+      });
     }
 
-    const el = event.target;
-    const interactive = el && el.closest &&
-      el.closest("a, button, [role='button'], .title-box");
+    const target = event.target;
 
-    hoverTarget = interactive ? 2.2 : 1;
+    hoverTarget = target && target.closest &&
+      target.closest("a, button, [role='button']")
+      ? 2.2 : 1;
   }, { passive: true });
 
-  window.addEventListener("pointerdown", () => { pressTarget = 0.7; });
-  window.addEventListener("pointerup", () => { pressTarget = 1; });
+  window.addEventListener("pointerdown", () => {
+    pressTarget = 0.7;
+  });
 
-  document.addEventListener("mouseleave", () => { seen = false; });
-  document.addEventListener("mouseenter", () => { seen = true; });
+  window.addEventListener("pointerup", () => {
+    pressTarget = 1;
+  });
 
-  let last = performance.now();
+  document.addEventListener("mouseleave", () => {
+    seen = false;
+  });
 
-  function frame(now) {
+  document.addEventListener("mouseenter", () => {
+    seen = true;
+  });
+
+  function frame() {
     requestAnimationFrame(frame);
 
-    const dt = Math.min(0.05, (now - last) / 1000);
-    last = now;
-    const k = dt * 60;
+    const ease = reduced ? 1 : 0.18;
 
-    hover += (hoverTarget - hover) * Math.min(1, 0.18 * k);
-    press += (pressTarget - press) * Math.min(1, 0.25 * k);
-    fade += ((seen ? 1 : 0) - fade) * Math.min(1, 0.2 * k);
+    hover += (hoverTarget - hover) * ease;
+    press += (pressTarget - press) * ease;
 
-    gl.disable(gl.SCISSOR_TEST);
-    gl.clearColor(0, 0, 0, 0);
-    gl.clear(gl.COLOR_BUFFER_BIT);
+    ctx.clearRect(0, 0, width, height);
 
-    if (!started || (fade < 0.01 && !seen)) return;
+    if (!started) return;
 
-    // Head chases the pointer; every other blob chases the one before it.
-    const head = pts[0];
-    const headEase = reduced ? 1 : Math.min(1, 0.55 * k);
+    const head = points[0];
+    const headEase = reduced ? 1 : 0.55;
+
     head.x += (mx - head.x) * headEase;
     head.y += (my - head.y) * headEase;
 
     for (let i = 1; i < N; i++) {
-      const ease = reduced ? 1 : Math.min(1, (FOLLOW - i * 0.006) * k);
-      pts[i].x += (pts[i - 1].x - pts[i].x) * ease;
-      pts[i].y += (pts[i - 1].y - pts[i].y) * ease;
+      const follow = reduced
+        ? 1
+        : Math.max(0.08, FOLLOW - i * 0.006);
+
+      points[i].x +=
+        (points[i - 1].x - points[i].x) * follow;
+
+      points[i].y +=
+        (points[i - 1].y - points[i].y) * follow;
     }
 
-    const base = BASE * dpr * hover * press;
+    if (!seen) return;
 
-    let minX = Infinity;
-    let minY = Infinity;
-    let maxX = -Infinity;
-    let maxY = -Infinity;
+    const base = BASE * hover * press;
 
-    for (let i = 0; i < N; i++) {
-      const r = base * (1 - 0.78 * (i / (N - 1)));
-      const x = pts[i].x;
-      const y = H - pts[i].y;
+    for (let i = N - 1; i >= 0; i--) {
+      const point = points[i];
+      const radius = base * (1 - 0.78 * i / (N - 1));
 
-      data[i * 3] = x;
-      data[i * 3 + 1] = y;
-      data[i * 3 + 2] = r;
+      const gradient = ctx.createRadialGradient(
+        point.x, point.y, 0,
+        point.x, point.y, radius * 2.4
+      );
 
-      if (x < minX) minX = x;
-      if (x > maxX) maxX = x;
-      if (y < minY) minY = y;
-      if (y > maxY) maxY = y;
+      gradient.addColorStop(0, "rgba(0,71,171,0.92)");
+      gradient.addColorStop(0.45, "rgba(0,71,171,0.65)");
+      gradient.addColorStop(1, "rgba(0,71,171,0)");
+
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      ctx.arc(point.x, point.y, radius * 2.4, 0, Math.PI * 2);
+      ctx.fill();
     }
-
-    // Only shade the area around the blob.
-    const m = base * 2.5 + 2;
-    const sx = Math.max(0, Math.floor(minX - m));
-    const sy = Math.max(0, Math.floor(minY - m));
-    const sw = Math.min(W - sx, Math.ceil(maxX - minX + m * 2));
-    const sh = Math.min(H - sy, Math.ceil(maxY - minY + m * 2));
-
-    if (sw <= 0 || sh <= 0) return;
-
-    gl.enable(gl.SCISSOR_TEST);
-    gl.scissor(sx, sy, sw, sh);
-
-    gl.uniform3fv(uP, data);
-    gl.uniform1f(uFade, fade);
-    gl.drawArrays(gl.TRIANGLES, 0, 3);
   }
 
-  requestAnimationFrame(frame);
+  frame();
 })();
 </script>
 
 </body>
 </html>
-
